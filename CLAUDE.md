@@ -32,8 +32,18 @@ FMS-Rampini/
 └── tools/
     ├── gen_signals.py       # rigenera src/signals.js dal DBC
     ├── gen_presentation.py  # rigenera docs/infografica.html e docs/slide.html dal catalogo
-    └── live_agent.py        # agente live: legge il bus CAN (o riproduce i dump) -> WebSocket
+    ├── live_agent.py        # agente live: legge il bus CAN (o riproduce i dump) -> WebSocket
+    └── dbc_from_dump.py     # reverse-DBC: inventory / skeleton / remap / makeseed
 ```
+Seed standard: `data/fms_standard_seed.dbc` (PGN < 0xFF00 J1939, riusabile per altri mezzi).
+
+## Reverse-DBC (dal dump al DBC)
+`tools/dbc_from_dump.py` costruisce/adatta il DBC di un mezzo dai dump:
+`inventory` (messaggi presenti + analisi byte: costante/contatore/enum/analogico),
+`skeleton` (DBC con segnali standard dal seed per i PGN noti + placeholder per-byte sui proprietari),
+`remap` (adatta un DBC esistente rimappando solo i source univoci e sicuri; i PGN proprietari condivisi
+restano AMBIGUI da verificare col costruttore), `makeseed` (estrae i PGN standard < 0xFF00 in un seed).
+La decodifica resta a senso inverso (DBC → dashboard); questo strumento è il senso DBC←dump.
 
 ## Modalità live
 `tools/live_agent.py` (solo stdlib) legge il bus via **SocketCAN nativo** (`socket.PF_CAN`) o

@@ -102,6 +102,34 @@ FMS-Rampini/
    messaggio, segnali derivati, tabelle filtrabili, selettore grafico multi-segnale.
 5. **Grafici** (`chart.js`): line chart su canvas con assi, griglia, decimazione e tooltip.
 
+## Generare o adattare il DBC di un mezzo (reverse-DBC)
+Lo strumento `tools/dbc_from_dump.py` usa i dump per **costruire o adattare un DBC** di un nuovo veicolo.
+Quattro modalità:
+
+```bash
+# Inventario di tutti i messaggi presenti + analisi byte (costante / contatore / enum / analogico):
+python3 tools/dbc_from_dump.py inventory --data data --out docs/dump_inventory.md
+
+# Scheletro DBC: segnali STANDARD completi per i PGN J1939 noti (dal seed) +
+# placeholder per-byte sui PGN proprietari, con commenti-indizio:
+python3 tools/dbc_from_dump.py skeleton --data data --out nuovo_mezzo.dbc
+
+# Adatta un DBC esistente al mezzo: rimappa i source che il dump conferma,
+# segnala come AMBIGUI i PGN proprietari condivisi (da verificare col costruttore):
+python3 tools/dbc_from_dump.py remap --dbc esistente.dbc --data data --out rimappato.dbc
+
+# (una tantum) crea il seed standard estraendo i PGN < 0xFF00 da un DBC:
+python3 tools/dbc_from_dump.py makeseed --dbc data/RAMPINI_ELTRON_TERNI_corretto.dbc --out data/fms_standard_seed.dbc
+```
+
+**Flusso tipico** per un mezzo nuovo:
+1. cattura un dump (live o fornito dal costruttore);
+2. `inventory` per vedere cosa trasmette; `skeleton` per partire da un DBC pre-popolato sugli standard;
+3. rifinisci a mano i segnali **proprietari** (gli unici che il dato da solo non rivela) usando i commenti-indizio;
+4. `python3 tools/gen_signals.py` + ricarica la dashboard per **validare** i valori (plausibilità fisica).
+
+> I segnali **FMS standard** si ricavano automaticamente; i **proprietari** (PGN 0xFF00–0xFFFF) richiedono i documenti del costruttore — il dump aiuta solo a ipotizzarli e la dashboard a validarli.
+
 ## Rigenerare il DB segnali dal DBC
 Se il DBC cambia:
 ```bash
