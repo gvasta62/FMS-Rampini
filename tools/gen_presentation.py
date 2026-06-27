@@ -10,18 +10,42 @@ import json, os, html, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CAT = os.path.join(ROOT, 'docs', 'catalogo_grandezze.json')
 
-# meta per sottosistema: icona + colore. Ordine = ordine di presentazione.
+# Icone SVG inline (a prova di font, ereditano il colore via currentColor).
+def _svg(body, sw=2):
+    return ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="%s" '
+            'stroke-linecap="round" stroke-linejoin="round">%s</svg>') % (sw, body)
+
+IC_BATT  = _svg('<rect x="2" y="7" width="15" height="10" rx="2"/><path d="M20 10.5v3"/>'
+                '<path d="M5.5 10v4M8.5 10v4M11.5 10v4"/>')
+IC_GEAR  = _svg('<circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3'
+                'M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>')
+IC_GAUGE = _svg('<path d="M4 14a8 8 0 0 1 16 0"/><path d="M12 14l3.6-3.6"/>'
+                '<circle cx="12" cy="14" r="1.4" fill="currentColor" stroke="none"/>')
+IC_SNOW  = _svg('<path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/>')
+IC_DOOR  = _svg('<path d="M5 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17"/><path d="M3 21h16"/>'
+                '<circle cx="13" cy="12" r="1" fill="currentColor" stroke="none"/>')
+IC_BRAKE = _svg('<path d="M8.2 3h7.6L21 8.2v7.6L15.8 21H8.2L3 15.8V8.2z"/><path d="M9 12h6"/>')
+IC_WARN  = _svg('<path d="M12 3 22 20H2z"/><path d="M12 9v5"/>'
+                '<circle cx="12" cy="17.4" r=".7" fill="currentColor" stroke="none"/>')
+IC_THERM = _svg('<path d="M10 13.5V5a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0z"/>')
+IC_CLOCK = _svg('<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3.4 1.6"/>')
+IC_DROP  = _svg('<path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/>')
+IC_OK    = _svg('<circle cx="12" cy="12" r="9"/><path d="M8 12.2l2.6 2.6L16 9"/>')
+IC_GLOBE = _svg('<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/>'
+                '<path d="M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/>')
+
+# meta per sottosistema: icona SVG + colore. Ordine = ordine di presentazione.
 SUBS = [
-    ('Batteria / BMS',          '🔋', '#2563eb'),
-    ('Trazione / Motore',       '⚙️', '#dc2626'),
-    ('Velocità / Odometro',     '🚌', '#059669'),
-    ('Climatizzazione (RHCV)',  '❄️', '#0891b2'),
-    ('Porte / Accessibilità',   '🚪', '#7c3aed'),
-    ('Freni / Aria',            '🛑', '#b45309'),
-    ('Diagnostica (DTC)',       '⚠️', '#db2777'),
-    ('Ambiente',                '🌡️', '#65a30d'),
-    ('Tempo / Data',            '🕐', '#475569'),
-    ('Livelli',                 '🛢️', '#9333ea'),
+    ('Batteria / BMS',          IC_BATT,  '#2563eb'),
+    ('Trazione / Motore',       IC_GEAR,  '#dc2626'),
+    ('Velocità / Odometro',     IC_GAUGE, '#059669'),
+    ('Climatizzazione (RHCV)',  IC_SNOW,  '#0891b2'),
+    ('Porte / Accessibilità',   IC_DOOR,  '#7c3aed'),
+    ('Freni / Aria',            IC_BRAKE, '#b45309'),
+    ('Diagnostica (DTC)',       IC_WARN,  '#db2777'),
+    ('Ambiente',                IC_THERM, '#65a30d'),
+    ('Tempo / Data',            IC_CLOCK, '#475569'),
+    ('Livelli',                 IC_DROP,  '#9333ea'),
 ]
 
 
@@ -122,7 +146,7 @@ def gen_infographic(cat, present, st, lamps):
             hvac_html = f'''
       <section class="card hvac" style="--c:{col}">
         <header><span class="ic">{ic}</span><h2>{html.escape(name)} — climatizzazione di bordo</h2>
-          <span class="badge2">❄️ HVAC · IN RISALTO</span></header>
+          <span class="badge2">{IC_SNOW} HVAC · IN RISALTO</span></header>
         <ul class="cols2">{''.join(rows)}</ul>
       </section>'''
         else:
@@ -138,11 +162,11 @@ def gen_infographic(cat, present, st, lamps):
             f'<li><span class="dot" style="background:{a["color"]}"></span> <b>{a["label"]}</b> — {a["sys"]} '
             f'<span class="dtc">guasto attivo · SPN {a["spn"]} · FMI {a["fmi"]} · {a["oc"]} occorrenze</span></li>'
             for a in lamps)
-        banner = (f'<div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — {len(lamps)}</div>'
+        banner = (f'<div class="alert"><div class="alert-h">{IC_WARN} Spie cruscotto rilevate ACCESE nel dump — {len(lamps)}</div>'
                   f'<ul>{items}</ul>'
                   f'<p class="alert-foot">Le altre spie (rossa di stop, MIL di malfunzionamento, protezione) risultano spente.</p></div>')
     else:
-        banner = '<div class="alert ok"><div class="alert-h">✅ Nessuna spia cruscotto accesa nel dump</div></div>'
+        banner = f'<div class="alert ok"><div class="alert-h">{IC_OK} Nessuna spia cruscotto accesa nel dump</div></div>'
 
     today = datetime.date(2026, 6, 27).strftime('%d/%m/%Y')
     return f'''<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">
@@ -162,7 +186,8 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
 .grid{{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}}
 .card{{background:#1e293b;border:1px solid #334155;border-top:4px solid var(--c);border-radius:12px;padding:14px 16px;break-inside:avoid}}
 .card header{{display:flex;align-items:center;gap:9px;margin-bottom:8px}}
-.card .ic{{font-size:20px}}
+.card .ic{{color:var(--c);display:inline-flex;align-items:center}}
+.card .ic svg{{width:22px;height:22px}}
 .card h2{{font-size:16px;margin:0;flex:1;color:#f1f5f9}}
 .card .cnt{{font-size:11px;color:#0f172a;background:var(--c);padding:2px 9px;border-radius:20px;font-weight:600}}
 .card ul{{list-style:none;margin:0;padding:0}}
@@ -179,6 +204,8 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
 .alert li:last-child{{border-bottom:none}}
 .alert .dtc{{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#fca5a5;background:#2a1206;padding:1px 8px;border-radius:6px}}
 .dot{{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:5px;box-shadow:0 0 0 2px rgba(255,255,255,.14)}}
+.alert-h svg{{width:18px;height:18px;vertical-align:-4px;margin-right:7px}}
+.badge2 svg{{width:13px;height:13px;vertical-align:-2px;margin-right:3px}}
 .alert-foot{{color:#b08055;font-size:12px;margin:8px 0 0}}
 .card.hvac{{border:1px solid #22d3ee;box-shadow:0 0 0 2px rgba(34,211,238,.25);background:#0c2733;margin:14px 0}}
 .card.hvac h2{{color:#a5f3fc}}
@@ -223,7 +250,7 @@ def gen_slides(cat, present, st, lamps):
 
     # 1 — titolo
     slide('title', f'''
-      <div class="badge">🔋 BUS ELETTRICO · CANALE FMS · J1939</div>
+      <div class="badge">{IC_BATT} BUS ELETTRICO · CANALE FMS · J1939</div>
       <h1>Le grandezze del bus Rampini&nbsp;Eltron</h1>
       <p class="sub">Catalogo dei dati disponibili sul dump del bus FMS — deposito di Terni</p>
       <p class="org">Busitalia · Direzione Ingegneria Parco Mezzi</p>''')
@@ -277,7 +304,7 @@ def gen_slides(cat, present, st, lamps):
                 f'<span class="dot" style="background:{a["color"]}"></span> {a["label"]} '
                 f'<i>({a["sys"].split(" —")[0]} · SPN {a["spn"]} / FMI {a["fmi"]} · {a["oc"]}×)</i>'
                 for a in lamps)
-            callout = f'<div class="lampcall">⚠️ <b>Spie cruscotto accese nel dump:</b> {ll}</div>'
+            callout = f'<div class="lampcall">{IC_WARN} <b>Spie cruscotto accese nel dump:</b> {ll}</div>'
         slide('detail', f'''
           <h2 style="--c:{col}"><span class="ic">{ic}</span>{disp}
             <em>{nd} grandezze</em></h2>{callout}
@@ -285,14 +312,14 @@ def gen_slides(cat, present, st, lamps):
           <tbody>{''.join(rows)}</tbody></table>''')
 
     # chiusura
-    slide('end', '''
+    slide('end', f'''
       <h2>In sintesi</h2>
       <ul class="big">
-        <li>✅ <b>86 grandezze</b> leggibili dal dump, su 10 sottosistemi</li>
-        <li>🔋 Telemetria batteria completa: tensione, corrente, SoC, SOH 94,8%, temperature, potenza</li>
-        <li>🚌 Dinamica di marcia: velocità 0–52 km/h, regime motore, pedali, odometro</li>
-        <li>⚠️ <b>''' + str(len(lamps)) + ''' spie ambra accese</b> nel dump — DTC attivi su BMS e sospensioni ECAS</li>
-        <li>🌐 Tutto consultabile online: <b>gvasta62.github.io/FMS-Rampini</b></li>
+        <li>{IC_OK} <b>{st['withdata']} grandezze</b> leggibili dal dump, su {st['subs']} sottosistemi</li>
+        <li>{IC_BATT} Telemetria batteria completa: tensione, corrente, SoC, SOH 94,8%, temperature, potenza</li>
+        <li>{IC_GAUGE} Dinamica di marcia: velocità 0–52 km/h, regime motore, pedali, odometro</li>
+        <li>{IC_WARN} <b>{len(lamps)} spie ambra accese</b> nel dump — DTC attivi su BMS e sospensioni ECAS</li>
+        <li>{IC_GLOBE} Tutto consultabile online: <b>gvasta62.github.io/FMS-Rampini</b></li>
       </ul>''')
 
     total = len(slides)
@@ -310,7 +337,8 @@ html,body{{margin:0;height:100%;background:#0b1220;font:16px/1.5 system-ui,Segoe
 @keyframes fade{{from{{opacity:.3}}to{{opacity:1}}}}
 h1{{font-size:46px;margin:.2em 0;line-height:1.1;background:linear-gradient(90deg,#60a5fa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}}
 h2{{font-size:30px;margin:0 0 22px;color:#f1f5f9;display:flex;align-items:center;gap:12px}}
-h2 .ic{{font-size:30px}}
+h2 .ic{{color:var(--c);display:inline-flex;align-items:center}}
+h2 .ic svg{{width:28px;height:28px}}
 h2 em{{font-style:normal;font-size:14px;font-weight:600;color:#0b1220;background:var(--c,#38bdf8);padding:3px 12px;border-radius:20px;margin-left:auto}}
 .title{{align-items:flex-start}}
 .badge{{font-size:13px;letter-spacing:1px;color:#22d3ee;border:1px solid #164e63;background:#0c2030;padding:6px 14px;border-radius:20px}}
@@ -330,7 +358,8 @@ h2 em{{font-style:normal;font-size:14px;font-weight:600;color:#0b1220;background
 .cap{{color:#94a3b8;font-size:14px;margin-top:26px;border-left:3px solid #2563eb;padding-left:14px}}
 .ovgrid{{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}}
 .ovc{{background:#15233b;border:1px solid #334155;border-top:4px solid var(--c);border-radius:14px;padding:18px 12px;text-align:center}}
-.ovc span{{font-size:30px;display:block}}
+.ovc span{{color:var(--c);display:flex;justify-content:center;height:30px}}
+.ovc span svg{{width:30px;height:30px}}
 .ovc b{{display:block;font-size:14px;margin:8px 0 4px;color:#f1f5f9}}
 .ovc i{{font-style:normal;font-size:12px;color:#94a3b8}}
 table{{width:100%;border-collapse:collapse;font-size:15px}}
@@ -342,11 +371,14 @@ td.n{{text-align:right;color:#94a3b8;font-variant-numeric:tabular-nums}}
 tr.dim td{{opacity:.45}}
 .lampcall{{background:#3b2410;border:1px solid #b45309;border-left:4px solid #f59e0b;border-radius:10px;padding:10px 16px;margin:-8px 0 16px;color:#fde68a;font-size:15px}}
 .lampcall i{{font-style:normal;color:#fca5a5;font-family:ui-monospace,Consolas,monospace;font-size:13px}}
+.lampcall svg{{width:18px;height:18px;vertical-align:-4px;margin-right:6px;color:#fbbf24}}
 .dot{{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:5px;box-shadow:0 0 0 2px rgba(255,255,255,.16)}}
 h2 em.hv{{background:#22d3ee}}
 .detail table{{display:block;max-height:58vh;overflow:auto}}
 ul.big{{font-size:21px;line-height:2;list-style:none;padding:0}}
 ul.big b{{color:#f8fafc}}
+ul.big svg{{width:24px;height:24px;vertical-align:-5px;margin-right:8px;color:#22d3ee}}
+.badge svg{{width:13px;height:13px;vertical-align:-2px;margin-right:5px}}
 .hud{{position:fixed;bottom:16px;right:20px;display:flex;align-items:center;gap:12px;z-index:10}}
 .hud button{{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;width:38px;height:34px;font-size:16px;cursor:pointer}}
 .hud button:hover{{background:#334155}}
