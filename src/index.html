@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMS-Rampini — Dashboard dump bus FMS</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">FMS</div>
+      <div>
+        <h1>Dashboard dump bus FMS</h1>
+        <div class="sub">Bus elettrico Rampini Eltron — canale FMS / CAN J1939</div>
+      </div>
+    </div>
+    <div class="loaders">
+      <label class="btn primary">Carica file CSV
+        <input type="file" id="file-input" accept=".csv" multiple hidden>
+      </label>
+      <button class="btn" id="btn-auto" title="Funziona solo se la pagina è servita via web server">Auto-carica data/</button>
+    </div>
+  </header>
+
+  <div id="dropzone" class="dropzone">
+    <div class="dz-inner">
+      <strong>Trascina qui i file <code>candump (N).csv</code></strong>
+      <span>oppure usa «Carica file CSV». Puoi caricare più dump insieme: vengono uniti per timestamp.</span>
+    </div>
+  </div>
+
+  <div id="status" class="status">In attesa dei dati…</div>
+
+  <section id="summary" class="summary"></section>
+  <div id="timespan" class="timespan"></div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="signals">Grandezze</button>
+    <button class="tab-btn" data-tab="messages">Messaggi</button>
+    <button class="tab-btn" data-tab="plot">Grafico</button>
+    <button class="tab-btn" data-tab="about">Info</button>
+  </nav>
+
+  <main>
+    <div id="tab-signals" class="tab-pane active">
+      <div class="toolbar"><input id="sig-filter" type="search" placeholder="Filtra grandezze (es. tens, temp, SoC, velocit…)"></div>
+      <div class="hint">Tutte le grandezze decodificate dai dump. «grafico» apre l'andamento temporale.</div>
+      <div id="signals-host"></div>
+    </div>
+
+    <div id="tab-messages" class="tab-pane"></div>
+
+    <div id="tab-plot" class="tab-pane">
+      <div class="toolbar">
+        <select id="plot-select" multiple size="6" class="plot-select"></select>
+        <div class="plot-hint">Ctrl/Cmd-click per confrontare più grandezze (max 8).</div>
+      </div>
+      <div id="plot-legend" class="legend"></div>
+      <div class="chart-wrap"><canvas id="plot-canvas"></canvas></div>
+    </div>
+
+    <div id="tab-about" class="tab-pane">
+      <h2>Come funziona</h2>
+      <p>I file <code>candump (N).csv</code> contengono i frame CAN grezzi del canale FMS (J1939).
+      La dashboard li decodifica usando la "chiave" del file DBC del costruttore
+      (<code>RAMPINI_ELTRON_TERNI_corretto.dbc</code>, 61 messaggi / 171 segnali) e ne ricava le
+      grandezze fisiche.</p>
+      <ul>
+        <li>Match dei frame per <b>PGN</b> (tipo di messaggio).</li>
+        <li>PGN proprietari <code>0xFF00/01/02</code>: valido solo il <b>source 30</b> (BMS).</li>
+        <li>Decodifica J1939: Intel/Motorola, segno, scala, offset, tabelle valori, multiplexing.</li>
+        <li>Grandezza <b>derivata</b> <code>Potenza istantanea = Vpack × IPack</code> da BMS_STAT1 (~4 Hz).</li>
+      </ul>
+      <p class="dim">Nota: la posizione GPS non transita sul canale FMS; i contatori energetici di
+      BMS_ENERGY possono restare a 0 perché non popolati dal BMS (vedi documenti in <code>docs/</code>).</p>
+    </div>
+  </main>
+  <footer class="foot">Busitalia — Direzione Ingegneria Parco Mezzi · progetto FMS-Rampini</footer>
+</div>
+
+<script src="signals.js"></script>
+<script src="decoder.js"></script>
+<script src="chart.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

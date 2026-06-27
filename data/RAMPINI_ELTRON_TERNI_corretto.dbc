@@ -1,0 +1,473 @@
+VERSION ""
+
+
+NS_ :
+  CM_
+  BA_DEF_
+  BA_
+  VAL_
+  BA_DEF_DEF_
+  SIG_VALTYPE_
+
+BS_:
+
+BU_: Vector__XXX
+
+
+BO_ 2566851102 BMS_STAT3: 8 Vector__XXX
+SG_ Instanttravelconsumption : 0|8@1- (0.2,0) [-25.6|25.4] "kWh/km" Vector__XXX
+SG_ Residualtrip : 8|8@1+ (5,0) [0|1275] "km" Vector__XXX
+SG_ BatterydeltaV : 16|8@1+ (0.02,0) [0|5.1] "V" Vector__XXX
+SG_ Dischargetime : 32|24@1+ (0.1,0) [0|1677721.5] "h" Vector__XXX
+SG_ SOH : 24|8@1+ (0.4,0) [0|102] "%" Vector__XXX
+SG_ TimetoEOC : 56|8@1+ (5,0) [0|1275] "minutes" Vector__XXX
+
+BO_ 2566843409 VI: 8 Vector__XXX
+
+BO_ 2566846225 VEP: 8 Vector__XXX
+SG_ BatteryPotential_PowerInput1 : 32|16@1+ (0.05,0) [0|3276.75] "" Vector__XXX
+
+BO_ 2566837521 AS: 8 Vector__XXX
+SG_ AlternatorStatus4 : 6|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AlternatorStatus3 : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AlternatorStatus2 : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AlternatorStatus1 : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 2566810385 DI: 8 Vector__XXX
+SG_ Driver2Identification : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+SG_ Driver1Identification : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+
+BO_ 2566805521 ASC4: 8 Vector__XXX
+
+BO_ 2566770961 FMS: 8 Vector__XXX
+SG_ SwVersionSupported : 8|32@1+ (1,0) [0|4294967295] "" Vector__XXX
+SG_ RequestsSupported : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ DiagnosticsSupported : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 2566698769 VEP4: 8 Vector__XXX
+SG_ HybridBatteryPackRemainingCharge : 0|16@1+ (0.0025,0) [0|163.8375] "" Vector__XXX
+
+BO_ 2566848790 HVAC_TEMP: 8 Vector__XXX
+
+BO_ 2566848534 HVAC: 8 Vector__XXX
+
+BO_ 2566849066 DCDC_ACT2: 8 Vector__XXX
+
+BO_ 2566848810 DCDC_ACT1: 8 Vector__XXX
+
+BO_ 2566848554 DCDC_STAT: 8 Vector__XXX
+
+BO_ 2566849566 BMS_CHRG: 8 Vector__XXX
+
+BO_ 2566848528 PCU_V: 8 Vector__XXX
+
+BO_ 2566856254 PCU_BMS: 8 Vector__XXX
+
+BO_ 2566852647 EVCU2: 8 Vector__XXX
+
+BO_ 2566864679 EVCU1: 8 Vector__XXX
+
+BO_ 2566884099 TEMP_EVCU: 8 Vector__XXX
+
+BO_ 2566852638 BMS_LCD_STAT: 8 Vector__XXX
+
+BO_ 2566889246 BMS_DICO: 8 Vector__XXX
+
+BO_ 2566850334 BMS_MSGS: 8 Vector__XXX
+SG_ SoC : 32|16@1+ (0.01,0) [0|655.35] "%" Vector__XXX
+
+BO_ 2566850078 BMS_DIAG: 8 Vector__XXX
+
+BO_ 2566849310 BMS_STAT2: 8 Vector__XXX
+SG_ BatterysystemOK : 53|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 2566849054 BMS_STAT1: 8 Vector__XXX
+SG_ Vpack : 0|16@1+ (0.1,0) [0|1000] "V" Vector__XXX
+SG_ IPack : 16|16@1- (0.01,0) [-327.68|327.67] "A" Vector__XXX
+SG_ BMSStateMachine : 48|16@1+ (1,0) [0|65535] "" Vector__XXX
+
+BO_ 2566848798 BMS_T: 8 Vector__XXX
+SG_ CellsTMax : 0|16@1+ (0.01,-40) [-40|615.35] "°C" Vector__XXX
+SG_ CellsTMin : 16|16@1+ (0.01,-40) [-40|615.35] "°C" Vector__XXX
+
+BO_ 2566848542 BMS_V: 8 Vector__XXX
+SG_ CellsVMax : 0|16@1+ (0.001,0) [0|4] "V" Vector__XXX
+SG_ CesllVMin : 16|16@1+ (0.001,0) [0|4] "V" Vector__XXX
+
+BO_ 2566884867 DICO3: 8 Vector__XXX
+
+BO_ 2566884355 DICO4: 8 Vector__XXX
+
+BO_ 2566884611 DICO2: 8 Vector__XXX
+
+BO_ 2566885123 DICO1: 8 Vector__XXX
+
+BO_ 2565865489 ERC1: 8 Vector__XXX
+SG_ ERC1_WheelBasedSpeed : 8|16@1+ (0.00390625,0) [0|255.99609375] "km/h" Vector__XXX
+
+BO_ 2566719761 HRLFC: 8 Vector__XXX
+SG_ HighResolutionEngineTotFuelUsed : 32|32@1+ (0.001,0) [0|4294967.295] "L" Vector__XXX
+
+BO_ 2566844945 LFE: 8 Vector__XXX
+SG_ AvgFuelEconomy : 32|16@1+ (0.00195312,0) [0|127.9977192] "km/L" Vector__XXX
+SG_ InstFuelEconomy : 16|16@1+ (0.00195312,0) [0|127.9977192] "km/L" Vector__XXX
+SG_ FuelRate : 0|16@1+ (0.05,0) [0|3276.75] "L/h" Vector__XXX
+
+BO_ 2566843921 ET1: 8 Vector__XXX
+SG_ EngineFuelTemperature : 8|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ EngineCoolantTemperature : 0|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+
+BO_ 2566847511 DD1: 8 Vector__XXX
+SG_ FuelLevel2 : 48|8@1+ (0.4,0) [0|102] "%" Vector__XXX
+SG_ FuelLevel1 : 8|8@1+ (0.4,0) [0|102] "%" Vector__XXX
+
+BO_ 2566842641 LFC: 8 Vector__XXX
+SG_ EngineTotalFuelUsed : 32|32@1+ (0.5,0) [0|2147483647.5] "" Vector__XXX
+
+BO_ 2565865739 EBC1: 8 Vector__XXX
+SG_ BrakePedalPos : 8|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+
+BO_ 2565866755 ETC2: 8 Vector__XXX
+SG_ CurrentGear : 24|8@1+ (1,-125) [-125|130] "" Vector__XXX
+SG_ SelectedGear : 0|8@1+ (1,-125) [-125|130] "" Vector__XXX
+
+BO_ 2566844689 CCVS: 8 Vector__XXX
+SG_ BrakeSw : 28|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ WheelBasedSpeed : 8|16@1+ (0.00390625,0) [0|255.99609375] "km/h" Vector__XXX
+SG_ ParkingBrakeSw : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 2566832622 VHDR: 8 Vector__XXX
+SG_ HighResolutionVehicleDistance : 0|32@1+ (0.005,0) [0|21474836.475] "km" Vector__XXX
+
+BO_ 2566841895 TD: 8 Vector__XXX
+SG_ Seconds : 0|8@1+ (0.25,0) [0|60] "" Vector__XXX
+SG_ Minutes : 8|8@1+ (1,0) [0|60] "" Vector__XXX
+SG_ Hours : 16|8@1+ (1,0) [0|24] "" Vector__XXX
+SG_ Month : 24|8@1+ (1,0) [0|12] "" Vector__XXX
+SG_ Day : 32|8@1+ (0.25,0) [0|31] "" Vector__XXX
+SG_ Year : 40|8@1+ (1,1807) [1807|2062] "" Vector__XXX
+
+BO_ 2566759916 DC2: 8 Vector__XXX
+SG_ LockStatusDoor2 : 6|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ LockStatusDoor1 : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ EnableStatusDoor2 : 10|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ EnableStatusDoor1 : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ OpenStatusDoor2 : 8|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ OpenStatusDoor1 : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 2566827568 AIR1: 8 Vector__XXX
+SG_ Service_Brake_Air_Pressure2 : 24|8@1+ (8,0) [0|2040] "" Vector__XXX
+SG_ Service_Brake_Air_Pressure1 : 16|8@1+ (8,0) [0|2040] "" Vector__XXX
+
+BO_ 2566845735 AMB: 8 Vector__XXX
+SG_ AMB_CabInteriorTemp : 8|16@1+ (0.03125,-273) [-273|1774.96875] "°C" Vector__XXX
+SG_ AMB_AirTemp : 24|16@1+ (0.03125,-273) [-273|1774.96875] "°C" Vector__XXX
+
+BO_ 2365484270 TCO1: 8 Vector__XXX
+SG_ TachoVehicleSpeed : 48|16@1+ (0.0039,0) [0|255.5865] "km/h" Vector__XXX
+
+BO_ 2566841617 HOURS: 8 Vector__XXX
+SG_ EngineTotalRevolutions : 32|32@1+ (1000,0) [0|4294967295000] "r" Vector__XXX
+SG_ MotorTotHours : 0|32@1+ (0.05,0) [0|214748364.75] "hours" Vector__XXX
+
+BO_ 2364539648 EEC2: 8 Vector__XXX
+SG_ AccPedalKickdownSw : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AccPedalPos : 8|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+
+BO_ 2364539904 EEC1: 8 Vector__XXX
+SG_ ActualEngine_PercentTorque : 16|8@1+ (1,-125) [-100|100] "%" Vector__XXX
+SG_ MotorSpeed : 24|16@1+ (0.125,0) [0|8191.875] "rpm" Vector__XXX
+
+BO_ 2566803180 DC1: 8 Vector__XXX
+SG_ PositionOfDoors : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+SG_ RampWheelChairLift : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ Status2ofdoors : 6|2@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 2566749457 FMS1: 1 Vector__XXX
+SG_ FMS1_Mux M : 0|4@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 2566858502 RHCV: 8 Vector__XXX
+SG_ RHCV_Mux M : 0|3@1+ (1,0) [0|0] "" Vector__XXX
+SG_ TempambientDRV m2 : 8|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ TempambientAMB m2 : 56|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ TempambientPAX m2 : 16|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ TempHeaterDriver m2 : 40|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ TempHeaterPax m2 : 48|8@1+ (1,-40) [-40|215] "°C" Vector__XXX
+SG_ EnergyHeating m1 : 8|8@1+ (1,0) [0|255] "kWh" Vector__XXX
+SG_ RHCVOverallPower m1 : 56|8@1+ (0.1,0) [0|25.5] "kW" Vector__XXX
+SG_ PowerDriverCabin m1 : 40|8@1+ (0.1,0) [0|25.5] "kW" Vector__XXX
+SG_ PowerPaxCabin m1 : 48|8@1+ (0.1,0) [0|25.5] "kW" Vector__XXX
+SG_ EnergyCooling m1 : 16|8@1+ (1,0) [0|255] "kWh" Vector__XXX
+SG_ EnergyDriver m1 : 24|8@1+ (1,0) [0|255] "kWh" Vector__XXX
+SG_ EnergyPax m1 : 32|8@1+ (1,0) [0|255] "kWh" Vector__XXX
+
+BO_ 2566850846 BMS_ENERGY: 8 Vector__XXX
+SG_ EnergyOut : 0|16@1+ (0.1,0) [0|6553.5] "kWh" Vector__XXX
+SG_ EnergyRegen : 16|16@1+ (0.1,0) [0|6553.5] "kWh" Vector__XXX
+SG_ BatteryPower : 32|8@1- (-2,0) [-254|256] "kW" Vector__XXX
+SG_ SOCenergy : 40|8@1+ (1.5,0) [0|382.5] "kWh" Vector__XXX
+SG_ EnergyCharged : 48|16@1+ (0.1,0) [0|655.35] "kWh" Vector__XXX
+
+BO_ 2566869008 DCDC1_OUT1: 2 Vector__XXX
+SG_ Vout : 7|16@0+ (0.1,0) [0|6553.5] "" Vector__XXX
+
+BO_ 2565867787 VDC2: 8 Vector__XXX
+SG_ LongitudinalAcceleration : 56|8@1+ (0.1,-12.5) [-12.5|12.5] "m/s^2" Vector__XXX
+
+BO_ 2566842366 VH: 8 Vector__XXX
+SG_ TotalVehicleHours : 0|32@1+ (0.05,0) [0|210554060.75] "hr" Vector__XXX
+SG_ TotalPowerTakeoffHours : 32|32@1+ (0.05,0) [0|210554060.75] "hr" Vector__XXX
+
+BO_ 2566849744 GW_INFO_04: 8 Vector__XXX
+SG_ Enginepower : 0|16@1- (0.05,0) [-1638.4|1638.35] "kW" Vector__XXX
+SG_ Auxiliaryenergy : 40|16@1+ (0.05,0) [0|3276.75] "kWh" Vector__XXX
+
+BO_ 2633935883 EBC4: 8 Vector__XXX
+SG_ BrkLiningRemain_FrntAxl_LftWheel : 0|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_FrntAxl_RghtWhl : 8|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl1_LftWhl : 16|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl1_RghtWhl : 24|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl2_LftWhl : 32|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl2_RghtWhl : 40|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl3_LftWhl : 48|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+SG_ BrkLiningRemain_RearAxl3_RghtWhl : 56|8@1+ (0.4,0) [0|100] "%" Vector__XXX
+
+BO_ 2566834718 DM01_BMS: 14 Vector__XXX
+SG_ ProtectLamp : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AmberWarningLamp : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ RedStopLamp : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ MalfunctionIndicatorLamp : 6|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashProtectLamp : 8|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashAmberWarningLamp : 10|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashRedStopLamp : 12|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashMalfunctionIndicatorLamp : 14|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ SPN0msb : 37|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN1msb : 69|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN2msb : 101|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN0 : 16|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN1 : 48|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN2 : 80|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ FMI0 : 32|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI1 : 64|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI2 : 96|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ OccurrenceCount0 : 40|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount1 : 72|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount2 : 104|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ SPNConversionMethod0 : 47|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod1 : 79|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod2 : 111|1@1+ (1,0) [0|1] "" Vector__XXX
+
+BO_ 2566834694 DM01_RHCV: 14 Vector__XXX
+SG_ ProtectLamp : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AmberWarningLamp : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ RedStopLamp : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ MalfunctionIndicatorLamp : 6|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashProtectLamp : 8|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashAmberWarningLamp : 10|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashRedStopLamp : 12|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashMalfunctionIndicatorLamp : 14|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ SPN0msb : 37|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN1msb : 69|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN2msb : 101|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN0 : 16|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN1 : 48|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN2 : 80|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ FMI0 : 32|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI1 : 64|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI2 : 96|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ OccurrenceCount0 : 40|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount1 : 72|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount2 : 104|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ SPNConversionMethod0 : 47|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod1 : 79|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod2 : 111|1@1+ (1,0) [0|1] "" Vector__XXX
+
+
+BO_ 2566834735 DM01_ECAS: 8 Vector__XXX
+SG_ ProtectLamp_ECAS : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ AmberWarningLamp_ECAS : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ RedStopLamp_ECAS : 4|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ MalfunctionIndicatorLamp_ECAS : 6|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashProtectLamp_ECAS : 8|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashAmberWarningLamp_ECAS : 10|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashRedStopLamp_ECAS : 12|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ FlashMalfunctionIndicatorLamp_ECAS : 14|2@1+ (1,0) [0|3] "" Vector__XXX
+SG_ SPN0msb_ECAS : 37|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN1msb_ECAS : 69|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN2msb_ECAS : 101|3@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPN0_ECAS : 16|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN1_ECAS : 48|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ SPN2_ECAS : 80|16@1+ (1,0) [0|65535] "" Vector__XXX
+SG_ FMI0_ECAS : 32|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI1_ECAS : 64|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ FMI2_ECAS : 96|5@1+ (1,0) [0|31] "" Vector__XXX
+SG_ OccurrenceCount0_ECAS : 40|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount1_ECAS : 72|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ OccurrenceCount2_ECAS : 104|7@1+ (1,0) [0|127] "" Vector__XXX
+SG_ SPNConversionMethod0_ECAS : 47|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod1_ECAS : 79|1@1+ (1,0) [0|1] "" Vector__XXX
+SG_ SPNConversionMethod2_ECAS : 111|1@1+ (1,0) [0|1] "" Vector__XXX
+CM_ SG_ 2566851102 Instanttravelconsumption "Instant com";
+CM_ SG_ 2566851102 Residualtrip "Calculated residual trip to SOCr_MIN";
+CM_ SG_ 2566851102 BatterydeltaV "Voltage difference between maximum and minimum cell voltage";
+CM_ SG_ 2566851102 Dischargetime "Overall discharge time";
+CM_ SG_ 2566851102 SOH "State of Health";
+CM_ SG_ 2566850334 SoC "Mapped SOC from real SOC";
+CM_ SG_ 2566849054 Vpack "[VPCK]";
+CM_ SG_ 2566849054 IPack "[IPCK]";
+CM_ SG_ 2566849054 BMSStateMachine "[STMC]";
+CM_ SG_ 2566827537 Service_Brake_Air_Pressure2 "kPa = 1/100 Bar";
+CM_ SG_ 2566827537 Service_Brake_Air_Pressure1 "kPa = 1/100 Bar";
+CM_ SG_ 2566845713 AMB_CabInteriorTemp "Ambient Air Temperature: Temperature of air surrounding vehicle.";
+CM_ SG_ 2566845713 AMB_AirTemp "Ambient Air Temperature: Temperature of air surrounding vehicle.";
+CM_ SG_ 2566841617 MotorTotHours "Engine total hours of Operation: Accumulated time of operation of engine.";
+CM_ SG_ 2364539665 AccPedalKickdownSw "Accelerator pedal position 1";
+CM_ SG_ 2364539665 AccPedalPos "Accelerator pedal position 1";
+CM_ SG_ 2364539921 MotorSpeed "rpm";
+CM_ SG_ 2566858502 RHCV_Mux "[XSEN]";
+CM_ SG_ 2566858502 TempambientDRV "[TDRV]";
+CM_ SG_ 2566858502 TempambientAMB "[TFBX]";
+CM_ SG_ 2566858502 TempambientPAX "[TPAX]";
+CM_ SG_ 2566858502 TempHeaterDriver "[TODR]";
+CM_ SG_ 2566858502 TempHeaterPax "[TOPA]";
+CM_ SG_ 2566858502 EnergyHeating "Session energy consumption [ENHT]";
+CM_ SG_ 2566858502 RHCVOverallPower "Overall Power consumed by RHCV system [PWOV]";
+CM_ SG_ 2566858502 PowerDriverCabin "[PWDR]";
+CM_ SG_ 2566858502 PowerPaxCabin "[PWPX]";
+CM_ SG_ 2566858502 EnergyCooling "Session energy consumption [ENCO]";
+CM_ SG_ 2566858502 EnergyDriver "Session energy consumption [ENDR]";
+CM_ SG_ 2566858502 EnergyPax "Session energy consumption [ENPX]";
+CM_ SG_ 2566850846 EnergyOut "Overall discharged energy during session";
+CM_ SG_ 2566850846 EnergyRegen "Energy recovered during session";
+CM_ SG_ 2566850846 EnergyCharged "Energy recovered during session";
+CM_ BO_ 2565867787 "Vehicle Dynamic Stability Control 2";
+CM_ BO_ 2566842366 "Vehicle Hours";
+CM_ BO_ 2633935883 "Wheel Brake Lining Remaining Information";
+CM_ BO_ 2566834718 "Codici Errore Diagnostici Attivi";
+CM_ BO_ 2566834694 "Codici Errore Diagnostici Attivi";
+
+BA_DEF_  "BusType" STRING ;
+BA_DEF_  "ProtocolType" STRING ;
+BA_DEF_ BO_  "VFrameFormat" ENUM  "StandardCAN","ExtendedCAN","reserved","J1939PG";
+BA_DEF_ BO_  "GenMsgCycleTime" INT 0 65535;
+BA_DEF_ SG_  "GenSigStartValue" FLOAT -3.4E+038 3.4E+038;
+BA_DEF_ SG_  "SPN" INT ;
+
+BA_DEF_DEF_  "BusType" "CAN";
+BA_DEF_DEF_  "ProtocolType" "J1939";
+BA_DEF_DEF_  "VFrameFormat" "J1939PG";
+BA_DEF_DEF_  "GenMsgCycleTime" 0;
+BA_DEF_DEF_  "GenSigStartValue" 0;
+BA_DEF_DEF_  "SPN" 0;
+
+BA_ "BusType" "CAN";
+BA_ "ProtocolType" "J1939";
+
+BA_ "VFrameFormat" BO_ 2566851102 3;
+BA_ "VFrameFormat" BO_ 2566850846 3;
+BA_ "VFrameFormat" BO_ 2566842366 3;
+BA_ "VFrameFormat" BO_ 2566834718 3;
+BA_ "VFrameFormat" BO_ 2566834694 3;
+
+BA_ "GenMsgCycleTime" BO_ 2566843409 10000;
+BA_ "GenMsgCycleTime" BO_ 2566846225 1000;
+BA_ "GenMsgCycleTime" BO_ 2566837521 1000;
+BA_ "GenMsgCycleTime" BO_ 2566810385 10000;
+BA_ "GenMsgCycleTime" BO_ 2566805521 100;
+BA_ "GenMsgCycleTime" BO_ 2566770961 10000;
+BA_ "GenMsgCycleTime" BO_ 2566698769 10000;
+BA_ "GenMsgCycleTime" BO_ 2566848790 1000;
+BA_ "GenMsgCycleTime" BO_ 2566848534 500;
+BA_ "GenMsgCycleTime" BO_ 2566849066 500;
+BA_ "GenMsgCycleTime" BO_ 2566848810 500;
+BA_ "GenMsgCycleTime" BO_ 2566848554 500;
+BA_ "GenMsgCycleTime" BO_ 2566849566 500;
+BA_ "GenMsgCycleTime" BO_ 2566848528 200;
+BA_ "GenMsgCycleTime" BO_ 2566856254 500;
+BA_ "GenMsgCycleTime" BO_ 2566852647 200;
+BA_ "GenMsgCycleTime" BO_ 2566864679 100;
+BA_ "GenMsgCycleTime" BO_ 2566884099 100;
+BA_ "GenMsgCycleTime" BO_ 2566852638 100;
+BA_ "GenMsgCycleTime" BO_ 2566889246 100;
+BA_ "GenMsgCycleTime" BO_ 2566850334 100;
+BA_ "GenMsgCycleTime" BO_ 2566850078 100;
+BA_ "GenMsgCycleTime" BO_ 2566849310 200;
+BA_ "GenMsgCycleTime" BO_ 2566849054 100;
+BA_ "GenMsgCycleTime" BO_ 2566848798 100;
+BA_ "GenMsgCycleTime" BO_ 2566848542 100;
+BA_ "GenMsgCycleTime" BO_ 2566884867 100;
+BA_ "GenMsgCycleTime" BO_ 2566884355 100;
+BA_ "GenMsgCycleTime" BO_ 2566884611 100;
+BA_ "GenMsgCycleTime" BO_ 2566885123 100;
+BA_ "GenMsgCycleTime" BO_ 2565865489 1000;
+BA_ "GenMsgCycleTime" BO_ 2566719761 1000;
+BA_ "GenMsgCycleTime" BO_ 2566844945 1000;
+BA_ "GenMsgCycleTime" BO_ 2566843921 1000;
+BA_ "GenMsgCycleTime" BO_ 2566847505 1000;
+BA_ "GenMsgCycleTime" BO_ 2566842641 1000;
+BA_ "GenMsgCycleTime" BO_ 2565865745 1000;
+BA_ "GenMsgCycleTime" BO_ 2565866769 1000;
+BA_ "GenMsgCycleTime" BO_ 2566844689 1000;
+BA_ "GenMsgCycleTime" BO_ 2566832401 1000;
+BA_ "GenMsgCycleTime" BO_ 2566841873 1000;
+BA_ "GenMsgCycleTime" BO_ 2566759697 1000;
+BA_ "GenMsgCycleTime" BO_ 2566827537 1000;
+BA_ "GenMsgCycleTime" BO_ 2566845713 1000;
+BA_ "GenMsgCycleTime" BO_ 2365484049 1000;
+BA_ "GenMsgCycleTime" BO_ 2566841617 1000;
+BA_ "GenMsgCycleTime" BO_ 2364539665 1000;
+BA_ "GenMsgCycleTime" BO_ 2364539921 1000;
+BA_ "GenMsgCycleTime" BO_ 2566802961 1000;
+BA_ "GenMsgCycleTime" BO_ 2566749457 1000;
+BA_ "GenMsgCycleTime" BO_ 2566869008 500;
+BA_ "GenMsgCycleTime" BO_ 2565867787 10;
+BA_ "GenMsgCycleTime" BO_ 2566834718 1000;
+BA_ "GenMsgCycleTime" BO_ 2566834694 1000;
+
+BA_ "GenSigStartValue" SG_ 2566841873 Year 1807;
+
+BA_ "SPN" SG_ 2566842366 TotalVehicleHours 246;
+BA_ "SPN" SG_ 2566842366 TotalPowerTakeoffHours 248;
+
+VAL_ 2566749457 FMS1_Mux 3 "BLOCK ID 3" 2 "BLOCK ID 2" 1 "BLOCK ID 1" 0 "BLOCK ID 0";
+VAL_ 2566858502 RHCV_Mux 2 "SENSOR" 1 "STAT";
+VAL_ 2566849310 BatterysystemOK 0 "NO" 1 "YES";
+VAL_ 2566849054 BMSStateMachine 0 "BOOT" 1 "IDLE" 4096 "ERROR" 8192 "CHARGE IDLE" 8193 "CHARGE WAIT PLUG" 8195 "CHARGE PRECHARGE" 8196 "CHARGE WAIT USER" 8197 "CHARGE WAIT CHARGER" 8198 "CHARGE RAMPUP" 8199 "CHARGE CHARGE" 8200 "CHARGE VCHARGE" 8201 "CHARGE EOCD" 8202 "CHARGE STDBY" 8203 "CHARGE SHUTDOWN" 8204 "CHARGE FINISH" 16384 "DRIVE WAIT IGNITION" 16385 "DRIVE WAIT CLOSE" 16386 "DRIVE PRECHARGE" 16387 "DRIVE START SERVICES" 16388 "DRIVE RUN" 16394 "DRIVE SAFE STOP" 16434 "DRIVE FAST STOP" 16396 "DRIVE FORCE STOP" 16449 "DRIVE WAIT OPENING" 16484 "DRIVE STOP" 16485 "DRIVE WAIT KEYOFF";
+VAL_ 2565865489 ERC1_WheelBasedSpeed 256 "N.A";
+VAL_ 2566844689 BrakeSw 1 "Pedal Dereleased" 0 "Pedal Released";
+VAL_ 2566844689 WheelBasedSpeed 256 "N.A";
+VAL_ 2566844689 ParkingBrakeSw 1 "Parking Brake Set" 0 "Parking Brake Not Set";
+VAL_ 2566759697 LockStatusDoor2 3 "N.A" 2 "Error" 1 "Lock" 0 "Unlock";
+VAL_ 2566759697 LockStatusDoor1 3 "N.A" 2 "Error" 1 "Lock" 0 "Unlock";
+VAL_ 2566759697 EnableStatusDoor2 3 "N.A" 2 "Error" 1 "Enable" 0 "Disable";
+VAL_ 2566759697 EnableStatusDoor1 3 "N.A" 2 "Error" 1 "Enable" 0 "Disable";
+VAL_ 2566759697 OpenStatusDoor2 3 "N.A" 2 "Error" 1 "Open" 0 "Closed";
+VAL_ 2566759697 OpenStatusDoor1 3 "N.A" 2 "Error" 1 "Open" 0 "Closed";
+VAL_ 2566845713 AMB_CabInteriorTemp 65535 "N.A";
+VAL_ 2566845713 AMB_AirTemp 65535 "N.A";
+VAL_ 2365484049 TachoVehicleSpeed 65535 "N.A";
+VAL_ 2566802961 PositionOfDoors 15 "N.A" 14 "Error" 2 "All Doors Closed  " 1 "Closing Last Door " 0 "At Least 1 Door is Open ";
+VAL_ 2566802961 RampWheelChairLift 3 "N.A" 2 "Error" 1 "Outside Bus" 0 "Inside Bus";
+VAL_ 2566802961 Status2ofdoors 3 "N.A" 2 "Error" 1 "At Least 1 Bus Door Enabled" 0 "All Bus Doors Disabled";
+VAL_ 2566834718 ProtectLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834718 AmberWarningLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834718 RedStopLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834718 MalfunctionIndicatorLamp 0 "Lamp Off" 1 "Lamp On" 2 "Short MIL for WWH OBD" 3 "Not available";
+VAL_ 2566834718 FlashProtectLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834718 FlashAmberWarningLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834718 FlashRedStopLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834718 FlashMalfunctionIndicatorLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Class C DTC  " 3 "Unavailable / Do Not Flash";
+VAL_ 2566834718 SPNConversionMethod0 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";
+VAL_ 2566834718 SPNConversionMethod1 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";
+VAL_ 2566834718 SPNConversionMethod2 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";
+VAL_ 2566834694 ProtectLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834694 AmberWarningLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834694 RedStopLamp 0 "Lamp Off" 1 "Lamp On" 2 "Reserved" 3 "Not available";
+VAL_ 2566834694 MalfunctionIndicatorLamp 0 "Lamp Off" 1 "Lamp On" 2 "Short MIL for WWH OBD" 3 "Not available";
+VAL_ 2566834694 FlashProtectLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834694 FlashAmberWarningLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834694 FlashRedStopLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Reserved" 3 "Unavailable / Do Not Flash";
+VAL_ 2566834694 FlashMalfunctionIndicatorLamp 0 "Slow Flash (1 Hz, 50 % duty cycle)" 1 "Fast Flash (2 Hz or faster, 50% duty cycle)" 2 "Class C DTC  " 3 "Unavailable / Do Not Flash";
+VAL_ 2566834694 SPNConversionMethod0 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";
+VAL_ 2566834694 SPNConversionMethod1 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";
+VAL_ 2566834694 SPNConversionMethod2 0 "Convert SPN per Version 4" 1 "Convert SPN per Version 1, 2 or 3";

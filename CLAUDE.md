@@ -1,0 +1,70 @@
+# FMS-Rampini — Dashboard dump bus FMS (Rampini Eltron elettrico)
+
+## Cos'è
+Progetto **web statico** (HTML + CSS + JavaScript vanilla, **zero dipendenze, zero build**) per
+leggere e presentare in modo chiaro tutti i dati contenuti in uno o più **dump del canale FMS**
+(CAN J1939) registrati su un autobus elettrico **Rampini Eltron** del deposito di Terni (Busitalia).
+
+La dashboard prende i frame CAN grezzi, li decodifica con la "chiave" del file DBC del costruttore
+e mostra le grandezze fisiche (tensioni, correnti, temperature, velocità, SoC, energie, diagnostica…)
+con statistiche e grafici temporali.
+
+## Stack
+- **HTML5 / CSS3 / JavaScript ES6** puro. Nessun framework, nessun bundler, nessuna CDN.
+- Grafici resi con un **renderer canvas custom** (`src/chart.js`) — niente librerie esterne, funziona offline.
+- Deve funzionare aprendo `src/index.html` in un browser, oppure servendo la cartella con un web server.
+
+## Struttura
+```
+FMS-Rampini/
+├── src/
+│   ├── index.html      # pagina dashboard
+│   ├── styles.css      # stile
+│   ├── signals.js      # DB segnali AUTO-GENERATO dal DBC (window.FMS_DB) — NON modificare a mano
+│   ├── decoder.js      # parsing CSV + decodifica J1939 (BigInt, Intel/Motorola, mux, PGN proprietari)
+│   ├── chart.js        # line chart su canvas, con assi e tooltip
+│   └── app.js          # orchestrazione UI, aggregazione, rendering
+├── data/
+│   ├── candump (18..23).csv          # i dump (6 file in questo dataset)
+│   └── RAMPINI_ELTRON_TERNI_corretto.dbc   # DBC sorgente da cui si rigenera signals.js
+├── docs/               # documenti di analisi tecnica (.docx)
+└── tools/
+    └── gen_signals.py  # rigenera src/signals.js dal DBC
+```
+
+## Formato dei dump (candump *.csv)
+Header: `hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered`
+- `pgn` — Parameter Group Number J1939 (intero) → identifica il **tipo di messaggio**.
+- `source` — indirizzo della centralina trasmittente (ultimo byte del CAN ID).
+- `timestamp` — epoch in **millisecondi**.
+- `value` — payload, fino a 8 byte in **esadecimale** (es. `95301786abac0000`).
+- Il numero `(N)` nel nome file è solo la sequenza di cattura; l'ordine reale si ricava dal `timestamp`.
+
+## Regole di decodifica (IMPORTANTI — dal confronto DBC vs bus reale)
+1. **Match per PGN**: un frame si decodifica trovando nel DBC il messaggio con lo stesso PGN.
+   Il `source` del DBC originale era spesso ereditato da un template diesel; il DBC `_corretto`
+   è già rimappato, ma la dashboard aggancia per PGN per massimizzare la copertura.
+2. **PGN proprietari condivisi `65280/65281/65282` (0xFF00/01/02)**: su questi PGN più centraline
+   trasmettono contenuti diversi. **È valido solo il `source 30` (BMS)** → rispettivamente
+   BMS_V, BMS_T, BMS_STAT1. Gli altri source (208, 73, 22, 42…) vanno **ignorati**, altrimenti
+   sovrascrivono i dati batteria con valori errati.
+3. **Messaggi multipli sullo stesso PGN** (es. DM1 su 65226: BMS/RHCV/ECAS): si sceglie la
+   definizione il cui `source` coincide con quello del frame.
+4. **Endianness**: `@1` = Intel/little-endian (quasi tutti), `@0` = Motorola/big-endian.
+   Segnali fino a 32 bit → usare **BigInt** per shift/mask sicuri.
+5. **Segnali con segno** (`-`): complemento a due su `len` bit.
+6. **N/A**: payload tutto `0xFF`, oppure raw che la value-table mappa a "N.A" → escluso dalle statistiche.
+7. **Multiplexing**: messaggi con selettore `M` (es. RHCV_Mux): includere i segnali senza mux
+   più quelli del gruppo `m<val>` pari al valore del selettore.
+
+## Note di dominio (dai documenti in docs/)
+- `BatteryPower` (BMS_ENERGY) ha scala già invertita a `-2` nel DBC corretto; il messaggio è a 0,08 Hz.
+  La **potenza istantanea** è meglio derivarla come `P = Vpack × IPack` da BMS_STAT1 (~4 Hz).
+- Velocità affidabile: **CCVS/WheelBasedSpeed** (PGN 65265) e TCO1/TachoVehicleSpeed (65132).
+- Contatori `EnergyOut`/`EnergyCharged` (BMS_ENERGY) restano a 0 (non popolati dal BMS): è un limite del dato, non della dashboard.
+- La posizione GPS **non** transita sul FMS (la fornisce il modulo telematico).
+
+## Convenzioni di lavoro
+- `signals.js` è **generato**: per modificarlo si edita il DBC e si rilancia `python3 tools/gen_signals.py`.
+- Lingua UI: **italiano**. Codice e commenti: italiano/inglese tecnico.
+- Nessun segreto nel repo. I dump contengono solo telemetria tecnica.
