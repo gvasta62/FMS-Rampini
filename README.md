@@ -71,6 +71,7 @@ Parametri: `--bitrate` (FMS = 250000), `--listen-only`, `--up` (Linux: configura
 - **PC Windows** → **PEAK PCAN-USB** (consigliato) o **Kvaser Leaf** / **CANable**: usa il backend `python-can` (una sola libreria gratuita).
 
 ## Documentazione e materiali
+- 🎬 **Presentazione (Gamma)** — keynote del progetto: https://gamma.app/docs/sen9ik1pnpck0kq (esportabile in PDF/PPTX dall'editor: Share → Export)
 - 📄 **Relazione dettagliata** del progetto: [`docs/RELAZIONE_PROGETTO.md`](docs/RELAZIONE_PROGETTO.md)
 - 📊 **Infografica** di tutte le grandezze: [`docs/infografica.html`](docs/infografica.html) · online: https://gvasta62.github.io/FMS-Rampini/docs/infografica.html (anteprima PNG: `docs/infografica.png`)
 - 🖥️ **Slide** (deck navigabile con le frecce): [`docs/slide.html`](docs/slide.html) · online: https://gvasta62.github.io/FMS-Rampini/docs/slide.html
