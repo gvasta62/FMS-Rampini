@@ -47,6 +47,46 @@ def val_str(s):
     return f"{num(mn)} … {num(mx)}{u}  ·  media {num(me)}{u}"
 
 
+def build_lamps(cat):
+    """Rileva le spie cruscotto (DM1) risultate ACCESE nel dump, con il relativo DTC."""
+    diag = cat['subsystems'].get('Diagnostica (DTC)', [])
+    bymsg = {}
+    for s in diag:
+        bymsg.setdefault(s['msg'], {})[s['sig']] = s
+    SYS = {'DM01_BMS': 'BMS — batteria',
+           'DM01_ECAS': 'ECAS — sospensioni pneumatiche',
+           'DM01_RHCV': 'RHCV — clima di tetto'}
+    LAMPS = [('AmberWarningLamp', 'Spia ambra (warning)', '🟠'),
+             ('RedStopLamp', 'Spia rossa (stop)', '🔴'),
+             ('MalfunctionIndicatorLamp', 'Spia MIL (malfunzionamento)', '🟡'),
+             ('ProtectLamp', 'Spia protezione', '🔵')]
+    active = []
+    for msg, sysname in SYS.items():
+        sigs = bymsg.get(msg)
+        if not sigs:
+            continue
+        suf = '_ECAS' if msg == 'DM01_ECAS' else ''
+        def g(base):
+            return sigs.get(base + suf) or sigs.get(base)
+        spn, fmi, oc = g('SPN0'), g('FMI0'), g('OccurrenceCount0')
+        for base, label, icon in LAMPS:
+            sig = g(base)
+            if not sig:
+                continue
+            if sig['categorical'] and sig['labels']:
+                on = any('On' in l for l in sig['labels'])
+            elif sig['n'] > 0:
+                on = (sig['max'] == 1)
+            else:
+                on = False
+            if on:
+                active.append({'sys': sysname, 'label': label, 'icon': icon,
+                               'spn': int(spn['max']) if spn and spn['n'] else '—',
+                               'fmi': int(fmi['max']) if fmi and fmi['n'] else '—',
+                               'oc': int(oc['max']) if oc and oc['n'] else '—'})
+    return active
+
+
 def load():
     cat = json.load(open(CAT, encoding='utf-8'))
     present = [(name, ic, col, [s for s in cat['subsystems'].get(name, [])])
@@ -66,8 +106,10 @@ def stats(cat):
 
 
 # --------------------------------------------------------------------------
-def gen_infographic(cat, present, st):
+def gen_infographic(cat, present, st, lamps):
+    HVAC = 'Climatizzazione (RHCV)'
     cards = []
+    hvac_html = ''
     for name, ic, col, sigs in present:
         nd = sum(1 for s in sigs if s['n'] > 0)
         rows = []
@@ -76,12 +118,31 @@ def gen_infographic(cat, present, st):
             rows.append(
                 f'<li{dim}><span class="sg">{html.escape(s["sig"])}</span>'
                 f'<span class="vl">{html.escape(val_str(s))}</span></li>')
-        cards.append(f'''
+        if name == HVAC:
+            hvac_html = f'''
+      <section class="card hvac" style="--c:{col}">
+        <header><span class="ic">{ic}</span><h2>{html.escape(name)} — climatizzazione di bordo</h2>
+          <span class="badge2">❄️ HVAC · IN RISALTO</span></header>
+        <ul class="cols2">{''.join(rows)}</ul>
+      </section>'''
+        else:
+            cards.append(f'''
       <section class="card" style="--c:{col}">
         <header><span class="ic">{ic}</span><h2>{html.escape(name)}</h2>
           <span class="cnt">{nd} grandezze</span></header>
         <ul>{''.join(rows)}</ul>
       </section>''')
+
+    if lamps:
+        items = ''.join(
+            f'<li>{a["icon"]} <b>{a["label"]}</b> — {a["sys"]} '
+            f'<span class="dtc">guasto attivo · SPN {a["spn"]} · FMI {a["fmi"]} · {a["oc"]} occorrenze</span></li>'
+            for a in lamps)
+        banner = (f'<div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — {len(lamps)}</div>'
+                  f'<ul>{items}</ul>'
+                  f'<p class="alert-foot">Le altre spie (rossa di stop, MIL di malfunzionamento, protezione) risultano spente.</p></div>')
+    else:
+        banner = '<div class="alert ok"><div class="alert-h">✅ Nessuna spia cruscotto accesa nel dump</div></div>'
 
     today = datetime.date(2026, 6, 27).strftime('%d/%m/%Y')
     return f'''<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">
@@ -109,6 +170,20 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
 .card li:last-child{{border-bottom:none}}
 .sg{{color:#cbd5e1;font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:nowrap}}
 .vl{{color:#7dd3fc;text-align:right}}
+.alert{{background:#3b2410;border:1px solid #b45309;border-left:5px solid #f59e0b;border-radius:12px;padding:14px 18px;margin:10px 0 4px}}
+.alert.ok{{background:#0e2a1c;border-color:#15803d;border-left-color:#22c55e}}
+.alert-h{{font-size:16px;font-weight:700;color:#fbbf24;margin-bottom:8px}}
+.alert.ok .alert-h{{color:#86efac;margin-bottom:0}}
+.alert ul{{list-style:none;margin:0;padding:0}}
+.alert li{{padding:5px 0;border-bottom:1px solid #5a3a17;font-size:13.5px;color:#fde68a}}
+.alert li:last-child{{border-bottom:none}}
+.alert .dtc{{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#fca5a5;background:#2a1206;padding:1px 8px;border-radius:6px}}
+.alert-foot{{color:#b08055;font-size:12px;margin:8px 0 0}}
+.card.hvac{{border:1px solid #22d3ee;box-shadow:0 0 0 2px rgba(34,211,238,.25);background:#0c2733;margin:14px 0}}
+.card.hvac h2{{color:#a5f3fc}}
+.badge2{{font-size:11px;color:#06141b;background:#22d3ee;padding:3px 11px;border-radius:20px;font-weight:700}}
+ul.cols2{{column-count:2;column-gap:28px}}
+ul.cols2 li{{break-inside:avoid}}
 .note{{margin-top:22px;background:#15233b;border:1px solid #334155;border-radius:12px;padding:14px 18px;font-size:12.5px;color:#94a3b8}}
 .note b{{color:#e2e8f0}}
 .foot{{text-align:center;color:#64748b;font-size:11.5px;margin-top:18px}}
@@ -125,6 +200,8 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
       <div class="kpi"><b>24</b><span>messaggi decodificati</span></div>
     </div>
   </div>
+  {banner}
+  {hvac_html}
   <div class="grid">{''.join(cards)}</div>
   <div class="note">
     <b>Come si leggono i dati.</b> Ogni frame CAN viene riconosciuto dal suo <b>PGN</b> (tipo di messaggio) e
@@ -137,7 +214,7 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
 
 
 # --------------------------------------------------------------------------
-def gen_slides(cat, present, st):
+def gen_slides(cat, present, st, lamps):
     slides = []
 
     def slide(cls, inner):
@@ -192,9 +269,16 @@ def gen_slides(cat, present, st):
                 f'<tr{dim}><td class="mono">{html.escape(s["sig"])}</td>'
                 f'<td>{unit}</td><td class="v">{html.escape(val_str(s))}</td>'
                 f'<td class="n">{s["n"]:,}</td></tr>'.replace(',', '.'))
+        disp = html.escape(name) + (' &nbsp;·&nbsp; HVAC' if name == 'Climatizzazione (RHCV)' else '')
+        callout = ''
+        if name == 'Diagnostica (DTC)' and lamps:
+            ll = ' &nbsp;·&nbsp; '.join(
+                f'{a["icon"]} {a["label"]} <i>({a["sys"].split(" —")[0]} · SPN {a["spn"]} / FMI {a["fmi"]} · {a["oc"]}×)</i>'
+                for a in lamps)
+            callout = f'<div class="lampcall">⚠️ <b>Spie cruscotto accese nel dump:</b> {ll}</div>'
         slide('detail', f'''
-          <h2 style="--c:{col}"><span class="ic">{ic}</span>{html.escape(name)}
-            <em>{nd} grandezze</em></h2>
+          <h2 style="--c:{col}"><span class="ic">{ic}</span>{disp}
+            <em>{nd} grandezze</em></h2>{callout}
           <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
           <tbody>{''.join(rows)}</tbody></table>''')
 
@@ -205,7 +289,7 @@ def gen_slides(cat, present, st):
         <li>✅ <b>86 grandezze</b> leggibili dal dump, su 10 sottosistemi</li>
         <li>🔋 Telemetria batteria completa: tensione, corrente, SoC, SOH 94,8%, temperature, potenza</li>
         <li>🚌 Dinamica di marcia: velocità 0–52 km/h, regime motore, pedali, odometro</li>
-        <li>⚠️ Diagnostica attiva (DTC) di BMS e sospensioni ECAS</li>
+        <li>⚠️ <b>''' + str(len(lamps)) + ''' spie ambra accese</b> nel dump — DTC attivi su BMS e sospensioni ECAS</li>
         <li>🌐 Tutto consultabile online: <b>gvasta62.github.io/FMS-Rampini</b></li>
       </ul>''')
 
@@ -254,7 +338,10 @@ td.mono{{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:#e2e
 td.v{{color:#7dd3fc}}
 td.n{{text-align:right;color:#94a3b8;font-variant-numeric:tabular-nums}}
 tr.dim td{{opacity:.45}}
-.detail table{{display:block;max-height:64vh;overflow:auto}}
+.lampcall{{background:#3b2410;border:1px solid #b45309;border-left:4px solid #f59e0b;border-radius:10px;padding:10px 16px;margin:-8px 0 16px;color:#fde68a;font-size:15px}}
+.lampcall i{{font-style:normal;color:#fca5a5;font-family:ui-monospace,Consolas,monospace;font-size:13px}}
+h2 em.hv{{background:#22d3ee}}
+.detail table{{display:block;max-height:58vh;overflow:auto}}
 ul.big{{font-size:21px;line-height:2;list-style:none;padding:0}}
 ul.big b{{color:#f8fafc}}
 .hud{{position:fixed;bottom:16px;right:20px;display:flex;align-items:center;gap:12px;z-index:10}}
@@ -283,11 +370,15 @@ show(0);
 def main():
     cat, present = load()
     st = stats(cat)
+    lamps = build_lamps(cat)
     open(os.path.join(ROOT, 'docs', 'infografica.html'), 'w', encoding='utf-8').write(
-        gen_infographic(cat, present, st))
+        gen_infographic(cat, present, st, lamps))
     open(os.path.join(ROOT, 'docs', 'slide.html'), 'w', encoding='utf-8').write(
-        gen_slides(cat, present, st))
-    print(f"OK: infografica.html + slide.html  ({st['withdata']} grandezze, {st['subs']} sottosistemi)")
+        gen_slides(cat, present, st, lamps))
+    print(f"OK: infografica.html + slide.html  ({st['withdata']} grandezze, "
+          f"{st['subs']} sottosistemi, {len(lamps)} spie accese)")
+    for a in lamps:
+        print(f"   {a['icon']} {a['label']} — {a['sys']} (SPN {a['spn']}/FMI {a['fmi']}, {a['oc']}×)")
 
 
 if __name__ == '__main__':

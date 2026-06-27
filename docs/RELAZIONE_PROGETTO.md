@@ -120,6 +120,20 @@ Il catalogo completo, grandezza per grandezza con unità, range osservato e nume
 in **`docs/catalogo_grandezze.json`** ed è rappresentato visivamente in **`docs/infografica.html`**
 e **`docs/slide.html`**.
 
+In apertura l'infografica evidenzia un **banner delle spie cruscotto risultate accese** nel dump e
+mette **in risalto i valori HVAC** (climatizzazione RHCV). Nel dataset analizzato risultano accese
+**2 spie ambra (warning)**:
+
+| Spia | Sistema | Codice guasto (DTC) | Occorrenze |
+|---|---|---|---|
+| 🟠 Ambra (warning) | BMS — batteria | SPN 57650 · FMI 0 | 1 |
+| 🟠 Ambra (warning) | ECAS — sospensioni pneumatiche | SPN 61507 · FMI 9 | 12 |
+
+Le spie rossa di stop, MIL (malfunzionamento) e di protezione risultano **spente**. I valori HVAC
+osservati: potenza complessiva clima 1,4–3,2 kW (cabina guida 1,1–3 kW, passeggeri 0–1 kW),
+energie di sessione cooling/driver/pax, temperature di mandata e ambiente; il riscaldamento risulta
+a 0 kWh (clima in raffrescamento).
+
 ## 6. Note tecniche rilevanti per l'esercizio
 
 - **Potenza**: usare la potenza derivata `V×I` (≈4 Hz) come indicatore istantaneo; il

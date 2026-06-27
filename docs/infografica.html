@@ -23,6 +23,20 @@ body{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI,
 .card li:last-child{border-bottom:none}
 .sg{color:#cbd5e1;font-family:ui-monospace,Consolas,monospace;font-size:12px;white-space:nowrap}
 .vl{color:#7dd3fc;text-align:right}
+.alert{background:#3b2410;border:1px solid #b45309;border-left:5px solid #f59e0b;border-radius:12px;padding:14px 18px;margin:10px 0 4px}
+.alert.ok{background:#0e2a1c;border-color:#15803d;border-left-color:#22c55e}
+.alert-h{font-size:16px;font-weight:700;color:#fbbf24;margin-bottom:8px}
+.alert.ok .alert-h{color:#86efac;margin-bottom:0}
+.alert ul{list-style:none;margin:0;padding:0}
+.alert li{padding:5px 0;border-bottom:1px solid #5a3a17;font-size:13.5px;color:#fde68a}
+.alert li:last-child{border-bottom:none}
+.alert .dtc{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#fca5a5;background:#2a1206;padding:1px 8px;border-radius:6px}
+.alert-foot{color:#b08055;font-size:12px;margin:8px 0 0}
+.card.hvac{border:1px solid #22d3ee;box-shadow:0 0 0 2px rgba(34,211,238,.25);background:#0c2733;margin:14px 0}
+.card.hvac h2{color:#a5f3fc}
+.badge2{font-size:11px;color:#06141b;background:#22d3ee;padding:3px 11px;border-radius:20px;font-weight:700}
+ul.cols2{column-count:2;column-gap:28px}
+ul.cols2 li{break-inside:avoid}
 .note{margin-top:22px;background:#15233b;border:1px solid #334155;border-radius:12px;padding:14px 18px;font-size:12.5px;color:#94a3b8}
 .note b{color:#e2e8f0}
 .foot{text-align:center;color:#64748b;font-size:11.5px;margin-top:18px}
@@ -39,6 +53,13 @@ body{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI,
       <div class="kpi"><b>24</b><span>messaggi decodificati</span></div>
     </div>
   </div>
+  <div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — 2</div><ul><li>🟠 <b>Spia ambra (warning)</b> — BMS — batteria <span class="dtc">guasto attivo · SPN 57650 · FMI 0 · 1 occorrenze</span></li><li>🟠 <b>Spia ambra (warning)</b> — ECAS — sospensioni pneumatiche <span class="dtc">guasto attivo · SPN 61507 · FMI 9 · 12 occorrenze</span></li></ul><p class="alert-foot">Le altre spie (rossa di stop, MIL di malfunzionamento, protezione) risultano spente.</p></div>
+  
+      <section class="card hvac" style="--c:#0891b2">
+        <header><span class="ic">❄️</span><h2>Climatizzazione (RHCV) — climatizzazione di bordo</h2>
+          <span class="badge2">❄️ HVAC · IN RISALTO</span></header>
+        <ul class="cols2"><li><span class="sg">EnergyCooling</span><span class="vl">3 … 4 kWh  ·  media 3,82 kWh</span></li><li><span class="sg">EnergyDriver</span><span class="vl">3 kWh (costante)</span></li><li><span class="sg">EnergyHeating</span><span class="vl">0 kWh (costante)</span></li><li><span class="sg">EnergyPax</span><span class="vl">0 … 1 kWh  ·  media 0,22 kWh</span></li><li><span class="sg">PowerDriverCabin</span><span class="vl">1,1 … 3 kW  ·  media 1,84 kW</span></li><li><span class="sg">PowerPaxCabin</span><span class="vl">0 … 1 kW  ·  media 0,46 kW</span></li><li><span class="sg">RHCVOverallPower</span><span class="vl">1,4 … 3,2 kW  ·  media 2,22 kW</span></li><li><span class="sg">TempambientAMB</span><span class="vl">30 … 31 °C  ·  media 30,02 °C</span></li><li><span class="sg">TempambientDRV</span><span class="vl">25 °C (costante)</span></li><li><span class="sg">TempambientPAX</span><span class="vl">25 °C (costante)</span></li><li><span class="sg">TempHeaterDriver</span><span class="vl">-17 °C (costante)</span></li><li><span class="sg">TempHeaterPax</span><span class="vl">-17 °C (costante)</span></li></ul>
+      </section>
   <div class="grid">
       <section class="card" style="--c:#2563eb">
         <header><span class="ic">🔋</span><h2>Batteria / BMS</h2>
@@ -54,11 +75,6 @@ body{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI,
         <header><span class="ic">🚌</span><h2>Velocità / Odometro</h2>
           <span class="cnt">5 grandezze</span></header>
         <ul><li><span class="sg">BrakeSw</span><span class="vl">Pedal Released · Pedal Dereleased</span></li><li><span class="sg">ParkingBrakeSw</span><span class="vl">Parking Brake Not Set · Parking Brake Set</span></li><li><span class="sg">WheelBasedSpeed</span><span class="vl">0 … 52,1 km/h  ·  media 21,98 km/h</span></li><li><span class="sg">TachoVehicleSpeed</span><span class="vl">0 … 52,01 km/h  ·  media 21,96 km/h</span></li><li><span class="sg">HighResolutionVehicleDistance</span><span class="vl">509,8 … 515,2 km  ·  media 511,99 km</span></li></ul>
-      </section>
-      <section class="card" style="--c:#0891b2">
-        <header><span class="ic">❄️</span><h2>Climatizzazione (RHCV)</h2>
-          <span class="cnt">12 grandezze</span></header>
-        <ul><li><span class="sg">EnergyCooling</span><span class="vl">3 … 4 kWh  ·  media 3,82 kWh</span></li><li><span class="sg">EnergyDriver</span><span class="vl">3 kWh (costante)</span></li><li><span class="sg">EnergyHeating</span><span class="vl">0 kWh (costante)</span></li><li><span class="sg">EnergyPax</span><span class="vl">0 … 1 kWh  ·  media 0,22 kWh</span></li><li><span class="sg">PowerDriverCabin</span><span class="vl">1,1 … 3 kW  ·  media 1,84 kW</span></li><li><span class="sg">PowerPaxCabin</span><span class="vl">0 … 1 kW  ·  media 0,46 kW</span></li><li><span class="sg">RHCVOverallPower</span><span class="vl">1,4 … 3,2 kW  ·  media 2,22 kW</span></li><li><span class="sg">TempambientAMB</span><span class="vl">30 … 31 °C  ·  media 30,02 °C</span></li><li><span class="sg">TempambientDRV</span><span class="vl">25 °C (costante)</span></li><li><span class="sg">TempambientPAX</span><span class="vl">25 °C (costante)</span></li><li><span class="sg">TempHeaterDriver</span><span class="vl">-17 °C (costante)</span></li><li><span class="sg">TempHeaterPax</span><span class="vl">-17 °C (costante)</span></li></ul>
       </section>
       <section class="card" style="--c:#7c3aed">
         <header><span class="ic">🚪</span><h2>Porte / Accessibilità</h2>
