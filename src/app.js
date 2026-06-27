@@ -259,13 +259,17 @@
   /* ---------- LIVE (WebSocket) ---------- */
   let ws = null, liveTimer = null, reconnectT = null;
   let liveMode = false;
-  const LIVE_WINDOW_MS = 5 * 60 * 1000;   // finestra scorrevole: ultimi 5 minuti
+  let liveRec = [];                       // registrazione GREZZA completa (per salvare il dump)
+  let recCapped = false;
+  const LIVE_WINDOW_MS = 5 * 60 * 1000;   // finestra scorrevole grafici: ultimi 5 minuti
+  const REC_MAX = 3000000;                // tetto di sicurezza memoria (~3M frame)
 
   function setLiveDot(cls) { $('#live-dot').className = 'live-dot ' + cls; }
 
   function connectLive(url) {
     disconnectLive(true);
     resetState();
+    liveRec = []; recCapped = false;
     liveMode = true;
     $('#app').classList.add('loaded', 'live');
     $('#btn-live').textContent = 'Disconnetti';
@@ -307,6 +311,9 @@
   function liveIngest(f) {
     // f = { pgn, source, ts, d:"hex" }  -> riusa il decoder già esistente
     const ts = f.ts || Date.now();
+    // registrazione grezza completa per il salvataggio del dump
+    if (liveRec.length < REC_MAX) liveRec.push({ ts, id: f.id || '', pgn: f.pgn, source: f.source, d: f.d });
+    else if (!recCapped) { recCapped = true; $('#status').textContent = 'Registrazione al limite di memoria: salva e riconnetti per continuare.'; }
     const bytes = DEC.hexToBytes(f.d);
     state.totalFrames++;
     if (ts < state.tMin) state.tMin = ts;
@@ -349,8 +356,11 @@
     }
     buildDerived();
     renderSummary();
-    $('#status').textContent = `● LIVE — ${state.totalFrames.toLocaleString('it-IT')} frame ricevuti · `
+    if (!recCapped) $('#status').textContent = `● LIVE — ${state.totalFrames.toLocaleString('it-IT')} frame ricevuti · `
       + `${[...state.signals.values()].filter(s => s.count).length} grandezze · finestra ${Math.round(LIVE_WINDOW_MS / 60000)} min`;
+    const mb = (liveRec.length * 40 / 1048576);
+    $('#rec-info').textContent = liveRec.length
+      ? `registrati ${liveRec.length.toLocaleString('it-IT')} frame (~${mb.toFixed(1)} MB)` : 'registrazione…';
     const tab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
     if (tab === 'signals') renderSignals($('#sig-filter').value);
     else if (tab === 'messages') renderMessages();
@@ -359,6 +369,24 @@
       if (keys.length) drawInto($('#plot-canvas'), keys, $('#plot-legend'));
     }
     if (state._dirtyPicker) { renderPlotPicker(); state._dirtyPicker = false; }
+  }
+
+  function saveDump() {
+    if (!liveRec.length) { alert('Nessun frame registrato da salvare.'); return; }
+    let name = ($('#dump-name').value || 'cattura_live').trim().replace(/[^\w.\-]+/g, '_');
+    if (!/\.csv$/i.test(name)) name += '.csv';
+    const lines = new Array(liveRec.length);
+    for (let i = 0; i < liveRec.length; i++) {
+      const r = liveRec[i];
+      const canid = r.id ? parseInt(r.id, 16) : '';
+      lines[i] = `${r.id},${canid},${r.pgn},${r.source},${r.ts},live,${r.d},false`;
+    }
+    const csv = 'hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered\n' + lines.join('\n') + '\n';
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = el('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+    $('#status').textContent = `Dump salvato: ${name} — ${liveRec.length.toLocaleString('it-IT')} frame.`;
   }
 
   /* ---------- init ---------- */
@@ -371,6 +399,7 @@
       if (liveMode) disconnectLive();
       else connectLive($('#ws-url').value.trim());
     });
+    $('#btn-save').addEventListener('click', saveDump);
     $('#sig-filter').addEventListener('input', e => renderSignals(e.target.value));
     $('#plot-select').addEventListener('change', e => {
       const keys = [...e.target.selectedOptions].map(o => o.value).slice(0, 8);

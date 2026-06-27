@@ -41,6 +41,14 @@ h1{font-size:19px;margin:0}
 .live-dot.off{background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
 #app.live .dropzone{display:none}
+.rec{display:none;align-items:center;gap:8px}
+#app.live .rec{display:inline-flex}
+#app.live #live-info{display:none}
+.rec .sep{color:#cbd5e1}
+#dump-name{padding:6px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;
+  font-family:ui-monospace,Consolas,monospace;min-width:150px}
+#btn-save{border-color:var(--blue);color:var(--blue)}
+#btn-save:hover{background:#eef4ff}
 
 .summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .chip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:120px}

@@ -37,6 +37,12 @@
     <input id="ws-url" value="ws://localhost:8770" spellcheck="false" autocomplete="off">
     <button class="btn" id="btn-live">Connetti live</button>
     <span class="live-info" id="live-info">agente: <code>python3 tools/live_agent.py --source replay --loop</code></span>
+    <span class="rec" id="rec-box">
+      <span class="sep">·</span>
+      <span class="live-info" id="rec-info"></span>
+      <input id="dump-name" placeholder="nome-dump" autocomplete="off">
+      <button class="btn" id="btn-save">Salva dump CSV</button>
+    </span>
   </div>
 
   <div id="status" class="status">In attesa dei dati…</div>

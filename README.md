@@ -45,11 +45,27 @@ La dashboard può ricevere i frame **in diretta** dal bus FMS, oltre che da file
    ```
 2. Nella dashboard, nella barra **«Dati in tempo reale»**, premi **Connetti live** (URL agente, default `ws://localhost:8770`).
 
-L'agente legge il bus via **SocketCAN nativo** e streama i frame J1939 (`{pgn,source,ts,d}`) via **WebSocket**;
+L'agente legge il bus via **SocketCAN nativo** e streama i frame J1939 (`{id,pgn,source,ts,d}`) via **WebSocket**;
 la dashboard li decodifica con lo stesso `decoder.js` e aggiorna tabelle e grafici su una **finestra scorrevole di 5 minuti**, con riconnessione automatica.
 
-**Hardware per leggere il bus FMS** (CAN J1939, 250 kbit/s, connettore FMS, *listen-only* consigliato):
-adattatore USB-CAN (PEAK/Kvaser) per PC, oppure Raspberry Pi + CAN HAT (PiCAN2/3) per una soluzione fissa a bordo.
+### Salvare il dump catturato live (con nome a scelta)
+- **Dal browser:** in modalità live, scrivi il **nome file** nel campo accanto e premi **«Salva dump CSV»** → scarica un
+  file `candump`-compatibile (`hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered`), **ricaricabile** nella dashboard stessa.
+- **Dall'agente (sul PC che cattura):** aggiungi `--save NOMEFILE.csv` al comando.
+
+### Configurazione hardware (nell'agente)
+```bash
+python3 tools/live_agent.py --list                 # elenca le interfacce CAN
+# Linux/SocketCAN (nativo, zero dipendenze):
+python3 tools/live_agent.py --source can --iface can0 --bitrate 250000 --listen-only --up
+# Windows o adattatori PEAK/Kvaser/CANable (backend python-can, free: pip install python-can):
+python3 tools/live_agent.py --source can --backend pythoncan --can-interface pcan --iface PCAN_USBBUS1 --bitrate 250000
+```
+Parametri: `--bitrate` (FMS = 250000), `--listen-only`, `--up` (Linux: configura e attiva l'interfaccia, root), `--iface`/`--can-interface`.
+
+**Hardware consigliato** (CAN J1939, 250 kbit/s, connettore FMS, *listen-only*):
+- **Linux/Raspberry Pi** → adattatore USB-CAN SocketCAN (es. **Korlan USB2CAN**, **Innomaker**, **CANable 2.0**) o **CAN HAT** (PiCAN2/3): l'agente funziona **senza dipendenze**.
+- **PC Windows** → **PEAK PCAN-USB** (consigliato) o **Kvaser Leaf** / **CANable**: usa il backend `python-can` (una sola libreria gratuita).
 
 ## Documentazione e materiali
 - 📄 **Relazione dettagliata** del progetto: [`docs/RELAZIONE_PROGETTO.md`](docs/RELAZIONE_PROGETTO.md)
