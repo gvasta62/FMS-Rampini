@@ -63,6 +63,9 @@ python3 tools/live_agent.py --source can --backend pythoncan --can-interface pca
 ```
 Parametri: `--bitrate` (FMS = 250000), `--listen-only`, `--up` (Linux: configura e attiva l'interfaccia, root), `--iface`/`--can-interface`.
 
+📘 **Guida passo-passo al primo collegamento hardware** (Windows / Raspberry Pi / Linux, con i comandi esatti):
+[`docs/GUIDA_HARDWARE.md`](docs/GUIDA_HARDWARE.md)
+
 **Hardware consigliato** (CAN J1939, 250 kbit/s, connettore FMS, *listen-only*):
 - **Linux/Raspberry Pi** → adattatore USB-CAN SocketCAN (es. **Korlan USB2CAN**, **Innomaker**, **CANable 2.0**) o **CAN HAT** (PiCAN2/3): l'agente funziona **senza dipendenze**.
 - **PC Windows** → **PEAK PCAN-USB** (consigliato) o **Kvaser Leaf** / **CANable**: usa il backend `python-can` (una sola libreria gratuita).
