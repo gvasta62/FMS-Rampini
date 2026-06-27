@@ -159,10 +159,40 @@ ogni `git push` (rebuild in ~1 minuto).
 > opzioni sono: rendere il repository privato (con Pages su piano a pagamento) oppure rimuovere
 > `data/` e `docs/` lasciando online la sola applicazione.
 
-## 8. Come rigenerare gli artefatti
+## 8. Dati in tempo reale (modalità live)
+
+La dashboard può ricevere i frame **in diretta** dal bus, oltre che da file. Un **agente**
+(`tools/live_agent.py`, **solo libreria standard Python**) legge il bus via **SocketCAN nativo**
+(o riproduce i dump per provare senza hardware) e li streama via **WebSocket**; la dashboard li
+decodifica con lo stesso `decoder.js` e aggiorna tabelle e grafici su una **finestra scorrevole di
+5 minuti**, con riconnessione automatica.
+
+- **Salvataggio dump con nome a scelta**: in modalità live, dal browser («Salva dump CSV») o
+  dall'agente (`--save FILE.csv`); il file è in **formato candump**, ricaricabile nella dashboard.
+- **Configurazione hardware** nell'agente: `--bitrate` (FMS = 250000), `--listen-only`, `--up`,
+  `--list`; backend `socketcan` (Linux, zero dipendenze) o `pythoncan` (Windows/PEAK/Kvaser/CANable).
+- **Hardware consigliato**: USB‑CAN (PEAK PCAN‑USB, CANable) per PC, o Raspberry Pi + CAN HAT a bordo.
+  **Il software è gratuito al 100%**; l'unico costo è l'adattatore CAN. Guida passo‑passo in
+  `docs/GUIDA_HARDWARE.md`.
+
+## 9. Dal dump al DBC (reverse-DBC)
+
+Lo strumento `tools/dbc_from_dump.py` percorre il senso inverso — dai dump verso il file DBC di un
+mezzo — in quattro modalità: **inventory** (inventario dei messaggi presenti + analisi byte:
+costante/contatore/enum/analogico), **skeleton** (DBC con i segnali J1939 **standard** completi per
+i PGN noti, dal seed `data/fms_standard_seed.dbc`, più placeholder per‑byte con commenti‑indizio sui
+PGN **proprietari**), **remap** (adatta un DBC esistente rimappando solo i source univoci e sicuri;
+i PGN proprietari condivisi restano *ambigui*, da verificare col costruttore), **makeseed** (estrae i
+PGN standard in un seed riusabile). I segnali standard si ricavano automaticamente; i proprietari
+(0xFF00–0xFFFF) richiedono i documenti del costruttore — il dump serve a ipotizzarli e la dashboard a
+validarli.
+
+## 10. Come rigenerare gli artefatti
 
 ```bash
 python3 tools/gen_signals.py        # rigenera src/signals.js dal DBC
 python3 tools/gen_presentation.py   # rigenera docs/infografica.html e docs/slide.html dal catalogo
+python3 tools/dbc_from_dump.py inventory --data data --out docs/dump_inventory.md   # reverse-DBC
+python3 tools/live_agent.py --source replay --loop                                  # agente live (prova)
 ```
 Il catalogo (`docs/catalogo_grandezze.json`) si ottiene decodificando i dump con `src/decoder.js`.
