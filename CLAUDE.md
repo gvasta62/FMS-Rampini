@@ -27,9 +27,11 @@ FMS-Rampini/
 ├── data/
 │   ├── candump (18..23).csv          # i dump (6 file in questo dataset)
 │   └── RAMPINI_ELTRON_TERNI_corretto.dbc   # DBC sorgente da cui si rigenera signals.js
-├── docs/               # documenti di analisi tecnica (.docx)
+├── docs/               # analisi (.docx), RELAZIONE_PROGETTO.md, catalogo_grandezze.json,
+│                       #   infografica.html/.png, slide.html
 └── tools/
-    └── gen_signals.py  # rigenera src/signals.js dal DBC
+    ├── gen_signals.py       # rigenera src/signals.js dal DBC
+    └── gen_presentation.py  # rigenera docs/infografica.html e docs/slide.html dal catalogo
 ```
 
 ## Formato dei dump (candump *.csv)
@@ -41,15 +43,19 @@ Header: `hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered`
 - Il numero `(N)` nel nome file è solo la sequenza di cattura; l'ordine reale si ricava dal `timestamp`.
 
 ## Regole di decodifica (IMPORTANTI — dal confronto DBC vs bus reale)
-1. **Match per PGN**: un frame si decodifica trovando nel DBC il messaggio con lo stesso PGN.
-   Il `source` del DBC originale era spesso ereditato da un template diesel; il DBC `_corretto`
-   è già rimappato, ma la dashboard aggancia per PGN per massimizzare la copertura.
-2. **PGN proprietari condivisi `65280/65281/65282` (0xFF00/01/02)**: su questi PGN più centraline
-   trasmettono contenuti diversi. **È valido solo il `source 30` (BMS)** → rispettivamente
-   BMS_V, BMS_T, BMS_STAT1. Gli altri source (208, 73, 22, 42…) vanno **ignorati**, altrimenti
-   sovrascrivono i dati batteria con valori errati.
-3. **Messaggi multipli sullo stesso PGN** (es. DM1 su 65226: BMS/RHCV/ECAS): si sceglie la
-   definizione il cui `source` coincide con quello del frame.
+1. **Match per PGN con priorità al source** (`decoder.js` → `pickMsg`):
+   - PGN condivisi documentati `65280/65281/65282` (0xFF00/01/02): **solo source 30 (BMS)** →
+     BMS_V/BMS_T/BMS_STAT1; gli altri source (208, 73, 22, 42…) sono **ignorati** anche se
+     definiti nel DBC, altrimenti sovrascrivono i dati batteria.
+   - Altrimenti si preferisce sempre il **match esatto `(PGN, source)`** (es. RHCV@6, EVCU2@39,
+     DM01_ECAS@47).
+   - Altri PGN proprietari `≥ 0xFF00`: **nessun fallback per solo-PGN** (zona di collisione
+     indirizzi) → un source non riconosciuto è spurio e va scartato. Questo esclude p.es.
+     BMS_STAT2/BMS_DIAG da source 208/39/40 senza perdere messaggi legittimi.
+   - PGN standard `< 0xFF00` a definizione unica: **recupero per solo-PGN** (il source del DBC
+     poteva essere ereditato da un template diesel).
+2. **Messaggi multipli sullo stesso PGN** (es. DM1 su 65226: BMS/RHCV/ECAS): coperti dal match
+   esatto per source di cui sopra.
 4. **Endianness**: `@1` = Intel/little-endian (quasi tutti), `@0` = Motorola/big-endian.
    Segnali fino a 32 bit → usare **BigInt** per shift/mask sicuri.
 5. **Segnali con segno** (`-`): complemento a due su `len` bit.

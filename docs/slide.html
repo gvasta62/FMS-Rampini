@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMS-Rampini — Slide grandezze</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0b1220;font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;color:#e2e8f0}
+.deck{height:100vh;overflow:hidden;position:relative}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:6vh 7vw;animation:fade .25s ease}
+.slide.active{display:flex}
+@keyframes fade{from{opacity:.3}to{opacity:1}}
+h1{font-size:46px;margin:.2em 0;line-height:1.1;background:linear-gradient(90deg,#60a5fa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:30px;margin:0 0 22px;color:#f1f5f9;display:flex;align-items:center;gap:12px}
+h2 .ic{font-size:30px}
+h2 em{font-style:normal;font-size:14px;font-weight:600;color:#0b1220;background:var(--c,#38bdf8);padding:3px 12px;border-radius:20px;margin-left:auto}
+.title{align-items:flex-start}
+.badge{font-size:13px;letter-spacing:1px;color:#22d3ee;border:1px solid #164e63;background:#0c2030;padding:6px 14px;border-radius:20px}
+.sub{font-size:20px;color:#cbd5e1;margin:6px 0}
+.org{color:#64748b;margin-top:18px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.kpi{background:#15233b;border:1px solid #334155;border-radius:14px;padding:20px 22px}
+.kpi b{font-size:30px;display:block;color:#f8fafc}
+.kpi span{color:#94a3b8;font-size:13px}
+.pipe{display:flex;align-items:stretch;gap:14px;margin-top:10px}
+.step{flex:1;background:#15233b;border:1px solid #334155;border-radius:14px;padding:18px;position:relative}
+.step span{position:absolute;top:-14px;left:18px;width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.step b{display:block;font-size:18px;margin-bottom:8px;color:#f1f5f9}
+.step code{display:block;background:#0b1220;border:1px solid #243044;border-radius:8px;padding:8px;font-size:12.5px;color:#7dd3fc;word-break:break-all}
+.step p{color:#94a3b8;font-size:13px;margin:8px 0 0}
+.arr{display:flex;align-items:center;color:#38bdf8;font-size:30px}
+.cap{color:#94a3b8;font-size:14px;margin-top:26px;border-left:3px solid #2563eb;padding-left:14px}
+.ovgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.ovc{background:#15233b;border:1px solid #334155;border-top:4px solid var(--c);border-radius:14px;padding:18px 12px;text-align:center}
+.ovc span{font-size:30px;display:block}
+.ovc b{display:block;font-size:14px;margin:8px 0 4px;color:#f1f5f9}
+.ovc i{font-style:normal;font-size:12px;color:#94a3b8}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;color:#94a3b8;font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid #334155;padding:6px 10px}
+td{padding:6px 10px;border-bottom:1px solid #1f2c44}
+td.mono{font-family:ui-monospace,Consolas,monospace;font-size:13.5px;color:#e2e8f0}
+td.v{color:#7dd3fc}
+td.n{text-align:right;color:#94a3b8;font-variant-numeric:tabular-nums}
+tr.dim td{opacity:.45}
+.detail table{display:block;max-height:64vh;overflow:auto}
+ul.big{font-size:21px;line-height:2;list-style:none;padding:0}
+ul.big b{color:#f8fafc}
+.hud{position:fixed;bottom:16px;right:20px;display:flex;align-items:center;gap:12px;z-index:10}
+.hud button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;width:38px;height:34px;font-size:16px;cursor:pointer}
+.hud button:hover{background:#334155}
+.hud .pg{color:#94a3b8;font-size:13px;min-width:52px;text-align:center}
+.bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#60a5fa,#22d3ee);z-index:10;transition:width .2s}
+@media print{.slide{display:flex!important;position:relative;height:100vh;page-break-after:always;background:#0b1220}.hud,.bar{display:none}}
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="deck" id="deck"><section class="slide title">
+      <div class="badge">🔋 BUS ELETTRICO · CANALE FMS · J1939</div>
+      <h1>Le grandezze del bus Rampini&nbsp;Eltron</h1>
+      <p class="sub">Catalogo dei dati disponibili sul dump del bus FMS — deposito di Terni</p>
+      <p class="org">Busitalia · Direzione Ingegneria Parco Mezzi</p></section><section class="slide stats">
+      <h2>Il dump in numeri</h2>
+      <div class="kpis">
+        <div class="kpi"><b>350.522</b><span>frame CAN registrati</span></div>
+        <div class="kpi"><b>750.6 s (12 min 31 s)</b><span>durata (marcia reale 0–52 km/h)</span></div>
+        <div class="kpi"><b>86</b><span>grandezze decodificate</span></div>
+        <div class="kpi"><b>10</b><span>sottosistemi del veicolo</span></div>
+        <div class="kpi"><b>24</b><span>messaggi CAN diversi</span></div>
+        <div class="kpi"><b>6</b><span>file dump uniti per timestamp</span></div>
+      </div></section><section class="slide flow">
+      <h2>Dal segnale grezzo alla grandezza</h2>
+      <div class="pipe">
+        <div class="step"><span>1</span><b>Frame CAN grezzo</b><code>0CFF3F1E … 95301786abac0000</code><p>PGN + source + payload esadecimale</p></div>
+        <div class="arr">→</div>
+        <div class="step"><span>2</span><b>Chiave DBC</b><code>61 messaggi · 171 segnali</code><p>bit, endianness, scala, offset, stati</p></div>
+        <div class="arr">→</div>
+        <div class="step"><span>3</span><b>Grandezza fisica</b><code>Vpack = 636,3 V</code><p>con unità, range e statistiche</p></div>
+      </div>
+      <p class="cap">Regola chiave: i PGN proprietari 0xFF00.. sono validi solo dalla centralina corretta (BMS = indirizzo 30); così i frame spuri di altre centraline non sovrascrivono i dati batteria.</p></section><section class="slide overview"><h2>Dieci sottosistemi monitorati</h2><div class="ovgrid"><div class="ovc" style="--c:#2563eb"><span>🔋</span><b>Batteria / BMS</b><i>21 grandezze</i></div><div class="ovc" style="--c:#dc2626"><span>⚙️</span><b>Trazione / Motore</b><i>7 grandezze</i></div><div class="ovc" style="--c:#059669"><span>🚌</span><b>Velocità / Odometro</b><i>5 grandezze</i></div><div class="ovc" style="--c:#0891b2"><span>❄️</span><b>Climatizzazione (RHCV)</b><i>12 grandezze</i></div><div class="ovc" style="--c:#7c3aed"><span>🚪</span><b>Porte / Accessibilità</b><i>8 grandezze</i></div><div class="ovc" style="--c:#b45309"><span>🛑</span><b>Freni / Aria</b><i>2 grandezze</i></div><div class="ovc" style="--c:#db2777"><span>⚠️</span><b>Diagnostica (DTC)</b><i>22 grandezze</i></div><div class="ovc" style="--c:#65a30d"><span>🌡️</span><b>Ambiente</b><i>2 grandezze</i></div><div class="ovc" style="--c:#475569"><span>🕐</span><b>Tempo / Data</b><i>6 grandezze</i></div><div class="ovc" style="--c:#9333ea"><span>🛢️</span><b>Livelli</b><i>1 grandezze</i></div></div></section><section class="slide detail">
+          <h2 style="--c:#2563eb"><span class="ic">🔋</span>Batteria / BMS
+            <em>21 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">BatteryPower</td><td>kW</td><td class="v">-246 … 250 kW  ·  media 7.07 kW</td><td class="n">60</td></tr><tr><td class="mono">EnergyCharged</td><td>kWh</td><td class="v">0 kWh (costante)</td><td class="n">60</td></tr><tr><td class="mono">EnergyOut</td><td>kWh</td><td class="v">0 kWh (costante)</td><td class="n">60</td></tr><tr><td class="mono">EnergyRegen</td><td>kWh</td><td class="v">6511.5 … 6514.6 kWh  ·  media 6512.93 kWh</td><td class="n">60</td></tr><tr><td class="mono">SOCenergy</td><td>kWh</td><td class="v">4.5 … 355.5 kWh  ·  media 182.43 kWh</td><td class="n">60</td></tr><tr><td class="mono">SoC</td><td>%</td><td class="v">57.33 … 59.22 %  ·  media 58.79 %</td><td class="n">3.011</td></tr><tr><td class="mono">BMSStateMachine</td><td>—</td><td class="v">DRIVE RUN</td><td class="n">3.100</td></tr><tr><td class="mono">IPack</td><td>A</td><td class="v">-116.7 … 251.4 A  ·  media 40.82 A</td><td class="n">3.100</td></tr><tr><td class="mono">Vpack</td><td>V</td><td class="v">619.7 … 640.3 V  ·  media 632.34 V</td><td class="n">3.100</td></tr><tr><td class="mono">BatterysystemOK</td><td>—</td><td class="v">NO</td><td class="n">3.072</td></tr><tr><td class="mono">BatterydeltaV</td><td>V</td><td class="v">0 … 4.08 V  ·  media 2.4 V</td><td class="n">3.026</td></tr><tr><td class="mono">Dischargetime</td><td>h</td><td class="v">0 h (costante)</td><td class="n">3.026</td></tr><tr><td class="mono">Instanttravelconsumption</td><td>kWh/km</td><td class="v">0 kWh/km (costante)</td><td class="n">3.026</td></tr><tr><td class="mono">Residualtrip</td><td>km</td><td class="v">0 km (costante)</td><td class="n">3.026</td></tr><tr><td class="mono">SOH</td><td>%</td><td class="v">94.8 % (costante)</td><td class="n">3.026</td></tr><tr><td class="mono">TimetoEOC</td><td>minutes</td><td class="v">0 minutes (costante)</td><td class="n">3.026</td></tr><tr><td class="mono">CellsTMax</td><td>°C</td><td class="v">30 … 31 °C  ·  media 30 °C</td><td class="n">3.143</td></tr><tr><td class="mono">CellsTMin</td><td>°C</td><td class="v">29 … 30 °C  ·  media 29.33 °C</td><td class="n">3.143</td></tr><tr><td class="mono">CellsVMax</td><td>V</td><td class="v">3.23 … 3.34 V  ·  media 3.29 V</td><td class="n">3.178</td></tr><tr><td class="mono">CesllVMin</td><td>V</td><td class="v">3.22 … 3.33 V  ·  media 3.29 V</td><td class="n">3.178</td></tr><tr><td class="mono">PotenzaIstantanea (V×I)</td><td>kW</td><td class="v">-74.58 … 156.07 kW  ·  media 25.6 kW</td><td class="n">3.100</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#dc2626"><span class="ic">⚙️</span>Trazione / Motore
+            <em>7 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">BrakePedalPos</td><td>%</td><td class="v">0 … 38.4 %  ·  media 2.57 %</td><td class="n">3.406</td></tr><tr><td class="mono">ActualEngine_PercentTorque</td><td>%</td><td class="v">0 … 52 %  ·  media 11.05 %</td><td class="n">34.296</td></tr><tr><td class="mono">MotorSpeed</td><td>rpm</td><td class="v">450 … 5276 rpm  ·  media 2293.61 rpm</td><td class="n">34.296</td></tr><tr><td class="mono">AccPedalKickdownSw</td><td>—</td><td class="v">0 (costante)</td><td class="n">13.918</td></tr><tr><td class="mono">AccPedalPos</td><td>%</td><td class="v">0 … 100 %  ·  media 22.72 %</td><td class="n">13.918</td></tr><tr><td class="mono">CurrentGear</td><td>—</td><td class="v">1 (costante)</td><td class="n">6.884</td></tr><tr><td class="mono">SelectedGear</td><td>—</td><td class="v">1 (costante)</td><td class="n">3.435</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#059669"><span class="ic">🚌</span>Velocità / Odometro
+            <em>5 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">BrakeSw</td><td>—</td><td class="v">Pedal Released · Pedal Dereleased</td><td class="n">10.366</td></tr><tr><td class="mono">ParkingBrakeSw</td><td>—</td><td class="v">Parking Brake Not Set · Parking Brake Set</td><td class="n">10.366</td></tr><tr><td class="mono">WheelBasedSpeed</td><td>km/h</td><td class="v">0 … 52.1 km/h  ·  media 21.98 km/h</td><td class="n">10.363</td></tr><tr><td class="mono">TachoVehicleSpeed</td><td>km/h</td><td class="v">0 … 52.01 km/h  ·  media 21.96 km/h</td><td class="n">6.864</td></tr><tr><td class="mono">HighResolutionVehicleDistance</td><td>km</td><td class="v">509.8 … 515.2 km  ·  media 511.99 km</td><td class="n">322</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#0891b2"><span class="ic">❄️</span>Climatizzazione (RHCV)
+            <em>12 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">EnergyCooling</td><td>kWh</td><td class="v">3 … 4 kWh  ·  media 3.82 kWh</td><td class="n">1.172</td></tr><tr><td class="mono">EnergyDriver</td><td>kWh</td><td class="v">3 kWh (costante)</td><td class="n">1.172</td></tr><tr><td class="mono">EnergyHeating</td><td>kWh</td><td class="v">0 kWh (costante)</td><td class="n">1.172</td></tr><tr><td class="mono">EnergyPax</td><td>kWh</td><td class="v">0 … 1 kWh  ·  media 0.22 kWh</td><td class="n">1.172</td></tr><tr><td class="mono">PowerDriverCabin</td><td>kW</td><td class="v">1.1 … 3 kW  ·  media 1.84 kW</td><td class="n">1.172</td></tr><tr><td class="mono">PowerPaxCabin</td><td>kW</td><td class="v">0 … 1 kW  ·  media 0.46 kW</td><td class="n">1.172</td></tr><tr><td class="mono">RHCVOverallPower</td><td>kW</td><td class="v">1.4 … 3.2 kW  ·  media 2.22 kW</td><td class="n">1.172</td></tr><tr><td class="mono">TempambientAMB</td><td>°C</td><td class="v">30 … 31 °C  ·  media 30.02 °C</td><td class="n">1.014</td></tr><tr><td class="mono">TempambientDRV</td><td>°C</td><td class="v">25 °C (costante)</td><td class="n">1.014</td></tr><tr><td class="mono">TempambientPAX</td><td>°C</td><td class="v">25 °C (costante)</td><td class="n">1.014</td></tr><tr><td class="mono">TempHeaterDriver</td><td>°C</td><td class="v">-17 °C (costante)</td><td class="n">1.014</td></tr><tr><td class="mono">TempHeaterPax</td><td>°C</td><td class="v">-17 °C (costante)</td><td class="n">1.014</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#7c3aed"><span class="ic">🚪</span>Porte / Accessibilità
+            <em>8 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">PositionOfDoors</td><td>—</td><td class="v">All Doors Closed  </td><td class="n">3.374</td></tr><tr><td class="mono">RampWheelChairLift</td><td>—</td><td class="v">Inside Bus</td><td class="n">3.374</td></tr><tr class="dim"><td class="mono">Status2ofdoors</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr><td class="mono">EnableStatusDoor1</td><td>—</td><td class="v">Disable</td><td class="n">3.357</td></tr><tr><td class="mono">EnableStatusDoor2</td><td>—</td><td class="v">Disable</td><td class="n">3.357</td></tr><tr><td class="mono">LockStatusDoor1</td><td>—</td><td class="v">Unlock</td><td class="n">3.357</td></tr><tr><td class="mono">LockStatusDoor2</td><td>—</td><td class="v">Unlock</td><td class="n">3.357</td></tr><tr><td class="mono">OpenStatusDoor1</td><td>—</td><td class="v">Closed</td><td class="n">3.357</td></tr><tr><td class="mono">OpenStatusDoor2</td><td>—</td><td class="v">Closed</td><td class="n">3.357</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#b45309"><span class="ic">🛑</span>Freni / Aria
+            <em>2 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">Service_Brake_Air_Pressure1</td><td>—</td><td class="v">952 … 1032  ·  media 978.58</td><td class="n">347</td></tr><tr><td class="mono">Service_Brake_Air_Pressure2</td><td>—</td><td class="v">936 … 1024  ·  media 977.91</td><td class="n">347</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_FrntAxl_LftWheel</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_FrntAxl_RghtWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl1_LftWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl1_RghtWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl2_LftWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl2_RghtWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl3_LftWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">BrkLiningRemain_RearAxl3_RghtWhl</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#db2777"><span class="ic">⚠️</span>Diagnostica (DTC)
+            <em>22 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">AmberWarningLamp</td><td>—</td><td class="v">Lamp On</td><td class="n">343</td></tr><tr class="dim"><td class="mono">FlashAmberWarningLamp</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">FlashMalfunctionIndicatorLamp</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">FlashProtectLamp</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr class="dim"><td class="mono">FlashRedStopLamp</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr><td class="mono">FMI0</td><td>—</td><td class="v">0 (costante)</td><td class="n">343</td></tr><tr><td class="mono">MalfunctionIndicatorLamp</td><td>—</td><td class="v">Lamp Off</td><td class="n">343</td></tr><tr><td class="mono">OccurrenceCount0</td><td>—</td><td class="v">1 (costante)</td><td class="n">343</td></tr><tr><td class="mono">ProtectLamp</td><td>—</td><td class="v">Lamp Off</td><td class="n">343</td></tr><tr><td class="mono">RedStopLamp</td><td>—</td><td class="v">Lamp Off</td><td class="n">343</td></tr><tr><td class="mono">SPN0</td><td>—</td><td class="v">57650 (costante)</td><td class="n">343</td></tr><tr><td class="mono">SPN0msb</td><td>—</td><td class="v">7 (costante)</td><td class="n">343</td></tr><tr class="dim"><td class="mono">SPN1</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr><td class="mono">SPNConversionMethod0</td><td>—</td><td class="v">Convert SPN per Version 4</td><td class="n">343</td></tr><tr><td class="mono">AmberWarningLamp_ECAS</td><td>—</td><td class="v">1 (costante)</td><td class="n">353</td></tr><tr><td class="mono">FlashAmberWarningLamp_ECAS</td><td>—</td><td class="v">3 (costante)</td><td class="n">353</td></tr><tr><td class="mono">FlashMalfunctionIndicatorLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">FlashProtectLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">FlashRedStopLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">FMI0_ECAS</td><td>—</td><td class="v">9 (costante)</td><td class="n">353</td></tr><tr><td class="mono">MalfunctionIndicatorLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">OccurrenceCount0_ECAS</td><td>—</td><td class="v">12 (costante)</td><td class="n">353</td></tr><tr><td class="mono">ProtectLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">RedStopLamp_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr><tr><td class="mono">SPN0_ECAS</td><td>—</td><td class="v">61507 (costante)</td><td class="n">353</td></tr><tr><td class="mono">SPN0msb_ECAS</td><td>—</td><td class="v">7 (costante)</td><td class="n">353</td></tr><tr class="dim"><td class="mono">SPN1_ECAS</td><td>—</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr><tr><td class="mono">SPNConversionMethod0_ECAS</td><td>—</td><td class="v">0 (costante)</td><td class="n">353</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#65a30d"><span class="ic">🌡️</span>Ambiente
+            <em>2 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">AMB_AirTemp</td><td>°C</td><td class="v">0 °C (costante)</td><td class="n">337</td></tr><tr><td class="mono">AMB_CabInteriorTemp</td><td>°C</td><td class="v">0 °C (costante)</td><td class="n">337</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#475569"><span class="ic">🕐</span>Tempo / Data
+            <em>6 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">Day</td><td>—</td><td class="v">26 (costante)</td><td class="n">661</td></tr><tr><td class="mono">Hours</td><td>—</td><td class="v">11 … 12  ·  media 11.67</td><td class="n">661</td></tr><tr><td class="mono">Minutes</td><td>—</td><td class="v">0 … 59  ·  media 22.07</td><td class="n">661</td></tr><tr><td class="mono">Month</td><td>—</td><td class="v">6 (costante)</td><td class="n">661</td></tr><tr><td class="mono">Seconds</td><td>—</td><td class="v">0 … 59  ·  media 29.65</td><td class="n">661</td></tr><tr><td class="mono">Year</td><td>—</td><td class="v">1848 (costante)</td><td class="n">661</td></tr></tbody></table></section><section class="slide detail">
+          <h2 style="--c:#9333ea"><span class="ic">🛢️</span>Livelli
+            <em>1 grandezze</em></h2>
+          <table><thead><tr><th>Grandezza</th><th>Unità</th><th>Valore osservato nel dump</th><th>Campioni</th></tr></thead>
+          <tbody><tr><td class="mono">FuelLevel1</td><td>%</td><td class="v">56.8 … 58.8 %  ·  media 58.31 %</td><td class="n">348</td></tr><tr class="dim"><td class="mono">FuelLevel2</td><td>%</td><td class="v">n/d (solo N/A)</td><td class="n">0</td></tr></tbody></table></section><section class="slide end">
+      <h2>In sintesi</h2>
+      <ul class="big">
+        <li>✅ <b>86 grandezze</b> leggibili dal dump, su 10 sottosistemi</li>
+        <li>🔋 Telemetria batteria completa: tensione, corrente, SoC, SOH 94,8%, temperature, potenza</li>
+        <li>🚌 Dinamica di marcia: velocità 0–52 km/h, regime motore, pedali, odometro</li>
+        <li>⚠️ Diagnostica attiva (DTC) di BMS e sospensioni ECAS</li>
+        <li>🌐 Tutto consultabile online: <b>gvasta62.github.io/FMS-Rampini</b></li>
+      </ul></section></div>
+<div class="hud"><button id="prev">‹</button><span class="pg" id="pg"></span><button id="next">›</button></div>
+<script>
+const sl=[...document.querySelectorAll('.slide')];let i=0;const N=sl.length;
+function show(n){i=Math.max(0,Math.min(N-1,n));sl.forEach((s,k)=>s.classList.toggle('active',k===i));
+  document.getElementById('pg').textContent=(i+1)+' / '+N;
+  document.getElementById('bar').style.width=((i+1)/N*100)+'%';}
+document.getElementById('next').onclick=()=>show(i+1);
+document.getElementById('prev').onclick=()=>show(i-1);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);
+  if(e.key==='ArrowLeft')show(i-1);if(e.key==='Home')show(0);if(e.key==='End')show(N-1);});
+show(0);
+</script></body></html>

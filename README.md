@@ -31,13 +31,21 @@ python3 -m http.server 8000
 - Grandezza **derivata** `Potenza istantanea = Vpack × IPack` da BMS_STAT1 (~4 Hz), più reattiva del
   `BatteryPower` di BMS_ENERGY (0,08 Hz).
 
+## Documentazione e materiali
+- 📄 **Relazione dettagliata** del progetto: [`docs/RELAZIONE_PROGETTO.md`](docs/RELAZIONE_PROGETTO.md)
+- 📊 **Infografica** di tutte le grandezze: [`docs/infografica.html`](docs/infografica.html) · online: https://gvasta62.github.io/FMS-Rampini/docs/infografica.html (anteprima PNG: `docs/infografica.png`)
+- 🖥️ **Slide** (deck navigabile con le frecce): [`docs/slide.html`](docs/slide.html) · online: https://gvasta62.github.io/FMS-Rampini/docs/slide.html
+- 🗂️ **Catalogo grandezze** (dati grezzi): [`docs/catalogo_grandezze.json`](docs/catalogo_grandezze.json)
+- 📚 Analisi tecnica originale: `docs/Analisi_FMS_Rampini_Eltron.docx`, `docs/Analisi_Dump_Esteso_FMS.docx`
+
 ## Struttura
 ```
 FMS-Rampini/
 ├── src/       index.html, styles.css, signals.js (auto-gen), decoder.js, chart.js, app.js
-├── data/      candump (18..23).csv  +  RAMPINI_ELTRON_TERNI_corretto.dbc
-├── docs/      documenti di analisi tecnica (.docx)
-├── tools/     gen_signals.py  (rigenera src/signals.js dal DBC)
+├── data/      candump (18..23).csv  +  RAMPINI_ELTRON_TERNI_corretto.dbc  +  manifest.json
+├── docs/      RELAZIONE_PROGETTO.md, infografica.html/.png, slide.html, catalogo_grandezze.json, analisi .docx
+├── tools/     gen_signals.py (DBC→signals.js)  ·  gen_presentation.py (catalogo→infografica/slide)
+├── index.html (redirect a src/) · .nojekyll
 ├── README.md
 └── CLAUDE.md
 ```
