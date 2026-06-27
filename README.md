@@ -45,7 +45,7 @@ FMS-Rampini/
 ├── data/      candump (18..23).csv  +  RAMPINI_ELTRON_TERNI_corretto.dbc  +  manifest.json
 ├── docs/      RELAZIONE_PROGETTO.md, infografica.html/.png, slide.html, catalogo_grandezze.json, analisi .docx
 ├── tools/     gen_signals.py (DBC→signals.js)  ·  gen_presentation.py (catalogo→infografica/slide)
-├── index.html (redirect a src/) · .nojekyll
+├── index.html (pagina indice/landing con i link agli strumenti) · .nojekyll
 ├── README.md
 └── CLAUDE.md
 ```

@@ -1,12 +1,96 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=./src/index.html">
-  <title>FMS-Rampini — Dashboard dump bus FMS</title>
-  <link rel="canonical" href="./src/index.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMS-Rampini — Dump bus FMS Rampini Eltron</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#0f172a;color:#e2e8f0;
+  font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  display:flex;flex-direction:column}
+.wrap{max-width:1040px;margin:0 auto;padding:34px 22px;width:100%;flex:1}
+.hero{text-align:center;margin-bottom:28px}
+.kick{font-size:12px;letter-spacing:1.5px;color:#22d3ee;border:1px solid #164e63;background:#0c2030;
+  display:inline-block;padding:6px 14px;border-radius:20px;margin-bottom:14px}
+h1{font-size:30px;margin:0 0 6px;
+  background:linear-gradient(90deg,#60a5fa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#94a3b8;margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.card{display:flex;flex-direction:column;background:#1e293b;border:1px solid #334155;border-top:4px solid var(--c);
+  border-radius:14px;padding:22px 20px;text-decoration:none;color:inherit;transition:.16s}
+.card:hover{transform:translateY(-3px);border-color:var(--c);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.ic{color:var(--c);margin-bottom:12px}
+.ic svg{width:34px;height:34px}
+.card h2{font-size:18px;margin:0 0 6px;color:#f1f5f9}
+.card p{color:#94a3b8;font-size:13.5px;margin:0;flex:1}
+.go{margin-top:16px;color:var(--c);font-weight:600;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.go svg{width:16px;height:16px}
+.sub{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.sub a{display:inline-flex;align-items:center;gap:8px;color:#cbd5e1;text-decoration:none;
+  border:1px solid #334155;background:#15233b;border-radius:10px;padding:9px 16px;font-size:13.5px;transition:.15s}
+.sub a:hover{border-color:#475569;color:#fff}
+.sub svg{width:17px;height:17px;color:#7dd3fc}
+.kpis{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:24px 0 4px}
+.kpi{background:#15233b;border:1px solid #334155;border-radius:10px;padding:8px 16px;text-align:center}
+.kpi b{display:block;font-size:18px;color:#f8fafc}
+.kpi span{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#94a3b8}
+.note{margin-top:26px;color:#64748b;font-size:12.5px;text-align:center}
+.foot{color:#64748b;font-size:11.5px;text-align:center;padding:18px;border-top:1px solid #1e293b}
+@media(max-width:720px){.cards{grid-template-columns:1fr}}
+</style>
 </head>
-<body style="font:14px system-ui;padding:24px">
-  Reindirizzamento alla <a href="./src/index.html">dashboard FMS-Rampini</a>…
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="kick">BUS ELETTRICO · CANALE FMS · CAN J1939</div>
+    <h1>Dump bus FMS — Rampini Eltron</h1>
+    <p>Lettura e analisi dei dati del bus FMS · deposito di Terni · Busitalia — Direzione Ingegneria Parco Mezzi</p>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><b>350.522</b><span>frame CAN</span></div>
+    <div class="kpi"><b>750,6 s</b><span>marcia reale</span></div>
+    <div class="kpi"><b>86</b><span>grandezze</span></div>
+    <div class="kpi"><b>10</b><span>sottosistemi</span></div>
+  </div>
+
+  <div class="cards">
+    <a class="card" style="--c:#2563eb" href="./src/index.html">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <h2>Dashboard interattiva</h2>
+      <p>Esplora i dati: carica i dump (o i tuoi CSV), filtra le grandezze, consulta tabelle e grafici temporali.</p>
+      <span class="go">Apri la dashboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="card" style="--c:#0891b2" href="./docs/infografica.html">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg></div>
+      <h2>Infografica</h2>
+      <p>Quadro d'insieme di tutte le grandezze per sottosistema, con spie cruscotto accese e valori HVAC in risalto.</p>
+      <span class="go">Apri l'infografica <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+
+    <a class="card" style="--c:#db2777" href="./docs/slide.html">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+      <h2>Slide</h2>
+      <p>Presentazione navigabile con le frecce: una sezione per ogni sottosistema. Adatta anche alla stampa in PDF.</p>
+      <span class="go">Apri le slide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+
+  <div class="sub">
+    <a href="https://github.com/gvasta62/FMS-Rampini/blob/main/docs/RELAZIONE_PROGETTO.md" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg>
+      Relazione dettagliata
+    </a>
+    <a href="https://github.com/gvasta62/FMS-Rampini" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 6-1.5 6-6.6a5 5 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.5 1.3a12 12 0 0 0-6 0C6.1.7 5 1 5 1a4.7 4.7 0 0 0-.1 3.5A5 5 0 0 0 3.5 8c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-1 2.6V21"/></svg>
+      Repository (codice e dati)
+    </a>
+  </div>
+
+  <p class="note">Si aprono nel browser, nessuna installazione necessaria. Per una presentazione: apri le Slide e premi F11 (schermo intero).</p>
+</div>
+<div class="foot">FMS-Rampini · Busitalia — Direzione Ingegneria Parco Mezzi · https://gvasta62.github.io/FMS-Rampini/</div>
 </body>
 </html>
