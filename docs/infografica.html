@@ -31,6 +31,7 @@ body{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI,
 .alert li{padding:5px 0;border-bottom:1px solid #5a3a17;font-size:13.5px;color:#fde68a}
 .alert li:last-child{border-bottom:none}
 .alert .dtc{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#fca5a5;background:#2a1206;padding:1px 8px;border-radius:6px}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:5px;box-shadow:0 0 0 2px rgba(255,255,255,.14)}
 .alert-foot{color:#b08055;font-size:12px;margin:8px 0 0}
 .card.hvac{border:1px solid #22d3ee;box-shadow:0 0 0 2px rgba(34,211,238,.25);background:#0c2733;margin:14px 0}
 .card.hvac h2{color:#a5f3fc}
@@ -53,7 +54,7 @@ ul.cols2 li{break-inside:avoid}
       <div class="kpi"><b>24</b><span>messaggi decodificati</span></div>
     </div>
   </div>
-  <div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — 2</div><ul><li>🟠 <b>Spia ambra (warning)</b> — BMS — batteria <span class="dtc">guasto attivo · SPN 57650 · FMI 0 · 1 occorrenze</span></li><li>🟠 <b>Spia ambra (warning)</b> — ECAS — sospensioni pneumatiche <span class="dtc">guasto attivo · SPN 61507 · FMI 9 · 12 occorrenze</span></li></ul><p class="alert-foot">Le altre spie (rossa di stop, MIL di malfunzionamento, protezione) risultano spente.</p></div>
+  <div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — 2</div><ul><li><span class="dot" style="background:#f59e0b"></span> <b>Spia ambra (warning)</b> — BMS — batteria <span class="dtc">guasto attivo · SPN 57650 · FMI 0 · 1 occorrenze</span></li><li><span class="dot" style="background:#f59e0b"></span> <b>Spia ambra (warning)</b> — ECAS — sospensioni pneumatiche <span class="dtc">guasto attivo · SPN 61507 · FMI 9 · 12 occorrenze</span></li></ul><p class="alert-foot">Le altre spie (rossa di stop, MIL di malfunzionamento, protezione) risultano spente.</p></div>
   
       <section class="card hvac" style="--c:#0891b2">
         <header><span class="ic">❄️</span><h2>Climatizzazione (RHCV) — climatizzazione di bordo</h2>

@@ -56,10 +56,10 @@ def build_lamps(cat):
     SYS = {'DM01_BMS': 'BMS — batteria',
            'DM01_ECAS': 'ECAS — sospensioni pneumatiche',
            'DM01_RHCV': 'RHCV — clima di tetto'}
-    LAMPS = [('AmberWarningLamp', 'Spia ambra (warning)', '🟠'),
-             ('RedStopLamp', 'Spia rossa (stop)', '🔴'),
-             ('MalfunctionIndicatorLamp', 'Spia MIL (malfunzionamento)', '🟡'),
-             ('ProtectLamp', 'Spia protezione', '🔵')]
+    LAMPS = [('AmberWarningLamp', 'Spia ambra (warning)', '#f59e0b'),
+             ('RedStopLamp', 'Spia rossa (stop)', '#ef4444'),
+             ('MalfunctionIndicatorLamp', 'Spia MIL (malfunzionamento)', '#eab308'),
+             ('ProtectLamp', 'Spia protezione', '#3b82f6')]
     active = []
     for msg, sysname in SYS.items():
         sigs = bymsg.get(msg)
@@ -69,7 +69,7 @@ def build_lamps(cat):
         def g(base):
             return sigs.get(base + suf) or sigs.get(base)
         spn, fmi, oc = g('SPN0'), g('FMI0'), g('OccurrenceCount0')
-        for base, label, icon in LAMPS:
+        for base, label, color in LAMPS:
             sig = g(base)
             if not sig:
                 continue
@@ -80,7 +80,7 @@ def build_lamps(cat):
             else:
                 on = False
             if on:
-                active.append({'sys': sysname, 'label': label, 'icon': icon,
+                active.append({'sys': sysname, 'label': label, 'color': color,
                                'spn': int(spn['max']) if spn and spn['n'] else '—',
                                'fmi': int(fmi['max']) if fmi and fmi['n'] else '—',
                                'oc': int(oc['max']) if oc and oc['n'] else '—'})
@@ -135,7 +135,7 @@ def gen_infographic(cat, present, st, lamps):
 
     if lamps:
         items = ''.join(
-            f'<li>{a["icon"]} <b>{a["label"]}</b> — {a["sys"]} '
+            f'<li><span class="dot" style="background:{a["color"]}"></span> <b>{a["label"]}</b> — {a["sys"]} '
             f'<span class="dtc">guasto attivo · SPN {a["spn"]} · FMI {a["fmi"]} · {a["oc"]} occorrenze</span></li>'
             for a in lamps)
         banner = (f'<div class="alert"><div class="alert-h">⚠️ Spie cruscotto rilevate ACCESE nel dump — {len(lamps)}</div>'
@@ -178,6 +178,7 @@ body{{margin:0;background:#0f172a;color:#e2e8f0;font:14px/1.5 system-ui,Segoe UI
 .alert li{{padding:5px 0;border-bottom:1px solid #5a3a17;font-size:13.5px;color:#fde68a}}
 .alert li:last-child{{border-bottom:none}}
 .alert .dtc{{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#fca5a5;background:#2a1206;padding:1px 8px;border-radius:6px}}
+.dot{{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:5px;box-shadow:0 0 0 2px rgba(255,255,255,.14)}}
 .alert-foot{{color:#b08055;font-size:12px;margin:8px 0 0}}
 .card.hvac{{border:1px solid #22d3ee;box-shadow:0 0 0 2px rgba(34,211,238,.25);background:#0c2733;margin:14px 0}}
 .card.hvac h2{{color:#a5f3fc}}
@@ -273,7 +274,8 @@ def gen_slides(cat, present, st, lamps):
         callout = ''
         if name == 'Diagnostica (DTC)' and lamps:
             ll = ' &nbsp;·&nbsp; '.join(
-                f'{a["icon"]} {a["label"]} <i>({a["sys"].split(" —")[0]} · SPN {a["spn"]} / FMI {a["fmi"]} · {a["oc"]}×)</i>'
+                f'<span class="dot" style="background:{a["color"]}"></span> {a["label"]} '
+                f'<i>({a["sys"].split(" —")[0]} · SPN {a["spn"]} / FMI {a["fmi"]} · {a["oc"]}×)</i>'
                 for a in lamps)
             callout = f'<div class="lampcall">⚠️ <b>Spie cruscotto accese nel dump:</b> {ll}</div>'
         slide('detail', f'''
@@ -340,6 +342,7 @@ td.n{{text-align:right;color:#94a3b8;font-variant-numeric:tabular-nums}}
 tr.dim td{{opacity:.45}}
 .lampcall{{background:#3b2410;border:1px solid #b45309;border-left:4px solid #f59e0b;border-radius:10px;padding:10px 16px;margin:-8px 0 16px;color:#fde68a;font-size:15px}}
 .lampcall i{{font-style:normal;color:#fca5a5;font-family:ui-monospace,Consolas,monospace;font-size:13px}}
+.dot{{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:5px;box-shadow:0 0 0 2px rgba(255,255,255,.16)}}
 h2 em.hv{{background:#22d3ee}}
 .detail table{{display:block;max-height:58vh;overflow:auto}}
 ul.big{{font-size:21px;line-height:2;list-style:none;padding:0}}
@@ -378,7 +381,7 @@ def main():
     print(f"OK: infografica.html + slide.html  ({st['withdata']} grandezze, "
           f"{st['subs']} sottosistemi, {len(lamps)} spie accese)")
     for a in lamps:
-        print(f"   {a['icon']} {a['label']} — {a['sys']} (SPN {a['spn']}/FMI {a['fmi']}, {a['oc']}×)")
+        print(f"   ● {a['label']} — {a['sys']} (SPN {a['spn']}/FMI {a['fmi']}, {a['oc']}×)")
 
 
 if __name__ == '__main__':
