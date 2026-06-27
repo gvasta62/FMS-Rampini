@@ -31,6 +31,14 @@
     </div>
   </div>
 
+  <div class="livebar">
+    <span class="live-dot off" id="live-dot"></span>
+    <span class="live-lbl">Dati in tempo reale:</span>
+    <input id="ws-url" value="ws://localhost:8770" spellcheck="false" autocomplete="off">
+    <button class="btn" id="btn-live">Connetti live</button>
+    <span class="live-info" id="live-info">agente: <code>python3 tools/live_agent.py --source replay --loop</code></span>
+  </div>
+
   <div id="status" class="status">In attesa dei dati…</div>
 
   <section id="summary" class="summary"></section>

@@ -31,6 +31,26 @@ python3 -m http.server 8000
 - Grandezza **derivata** `Potenza istantanea = Vpack × IPack` da BMS_STAT1 (~4 Hz), più reattiva del
   `BatteryPower` di BMS_ENERGY (0,08 Hz).
 
+## Modalità live (dati in tempo reale)
+La dashboard può ricevere i frame **in diretta** dal bus FMS, oltre che da file.
+
+1. Avvia l'**agente** (legge il bus o riproduce i dump) — solo libreria standard Python, nessuna dipendenza:
+   ```bash
+   # Prova senza hardware: riproduce i dump in tempo reale
+   python3 tools/live_agent.py --source replay --loop
+
+   # Bus reale (Raspberry Pi/PC con interfaccia CAN configurata):
+   #   sudo ip link set can0 type can bitrate 250000 listen-only on && sudo ip link set up can0
+   python3 tools/live_agent.py --source can --iface can0
+   ```
+2. Nella dashboard, nella barra **«Dati in tempo reale»**, premi **Connetti live** (URL agente, default `ws://localhost:8770`).
+
+L'agente legge il bus via **SocketCAN nativo** e streama i frame J1939 (`{pgn,source,ts,d}`) via **WebSocket**;
+la dashboard li decodifica con lo stesso `decoder.js` e aggiorna tabelle e grafici su una **finestra scorrevole di 5 minuti**, con riconnessione automatica.
+
+**Hardware per leggere il bus FMS** (CAN J1939, 250 kbit/s, connettore FMS, *listen-only* consigliato):
+adattatore USB-CAN (PEAK/Kvaser) per PC, oppure Raspberry Pi + CAN HAT (PiCAN2/3) per una soluzione fissa a bordo.
+
 ## Documentazione e materiali
 - 📄 **Relazione dettagliata** del progetto: [`docs/RELAZIONE_PROGETTO.md`](docs/RELAZIONE_PROGETTO.md)
 - 📊 **Infografica** di tutte le grandezze: [`docs/infografica.html`](docs/infografica.html) · online: https://gvasta62.github.io/FMS-Rampini/docs/infografica.html (anteprima PNG: `docs/infografica.png`)

@@ -81,7 +81,7 @@
     const decodedSigs = [...state.signals.values()].filter(s => s.count > 0).length;
     $('#summary').innerHTML = '';
     const chips = [
-      ['File caricati', state.files.length],
+      liveMode ? ['Sorgente', '● LIVE'] : ['File caricati', state.files.length],
       ['Frame totali', state.totalFrames.toLocaleString('it-IT')],
       ['Durata', durationStr()],
       ['Messaggi decodificati', state.msgStats.size],
@@ -256,12 +256,121 @@
     if (k) { renderPlotPicker(); }
   }
 
+  /* ---------- LIVE (WebSocket) ---------- */
+  let ws = null, liveTimer = null, reconnectT = null;
+  let liveMode = false;
+  const LIVE_WINDOW_MS = 5 * 60 * 1000;   // finestra scorrevole: ultimi 5 minuti
+
+  function setLiveDot(cls) { $('#live-dot').className = 'live-dot ' + cls; }
+
+  function connectLive(url) {
+    disconnectLive(true);
+    resetState();
+    liveMode = true;
+    $('#app').classList.add('loaded', 'live');
+    $('#btn-live').textContent = 'Disconnetti';
+    setLiveDot('connecting');
+    $('#status').textContent = 'Connessione live a ' + url + ' …';
+    try { ws = new WebSocket(url); }
+    catch (e) { $('#status').textContent = 'URL non valido: ' + e.message; setLiveDot('off'); liveMode = false; return; }
+
+    ws.onopen = () => {
+      setLiveDot('on');
+      $('#status').textContent = '● LIVE — in ricezione…';
+      document.querySelector('[data-tab="signals"]').click();
+      if (liveTimer) clearInterval(liveTimer);
+      liveTimer = setInterval(liveTick, 1000);
+    };
+    ws.onmessage = ev => { try { liveIngest(JSON.parse(ev.data)); } catch (e) { /* frame ignorato */ } };
+    ws.onerror = () => setLiveDot('off');
+    ws.onclose = () => {
+      setLiveDot('off');
+      if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+      if (liveMode) {
+        $('#status').textContent = 'Live disconnesso — nuovo tentativo tra 3 s…';
+        reconnectT = setTimeout(() => { if (liveMode) connectLive(url); }, 3000);
+      }
+    };
+  }
+
+  function disconnectLive(silent) {
+    liveMode = false;
+    if (reconnectT) { clearTimeout(reconnectT); reconnectT = null; }
+    if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+    if (ws) { try { ws.onclose = null; ws.close(); } catch (e) {} ws = null; }
+    setLiveDot('off');
+    $('#btn-live').textContent = 'Connetti live';
+    $('#app').classList.remove('live');
+    if (!silent) $('#status').textContent = 'Live disconnesso.';
+  }
+
+  function liveIngest(f) {
+    // f = { pgn, source, ts, d:"hex" }  -> riusa il decoder già esistente
+    const ts = f.ts || Date.now();
+    const bytes = DEC.hexToBytes(f.d);
+    state.totalFrames++;
+    if (ts < state.tMin) state.tMin = ts;
+    if (ts > state.tMax) state.tMax = ts;
+    const dec = DEC.decodeFrame({ pgn: f.pgn, source: f.source, ts, bytes });
+    if (!dec) return;
+    const mn = dec.msg.name;
+    let ms = state.msgStats.get(mn);
+    if (!ms) { ms = { pgn: dec.msg.pgn, comment: dec.msg.comment, count: 0, firstTs: ts, lastTs: ts, sources: new Set() }; state.msgStats.set(mn, ms); }
+    ms.count++; ms.lastTs = ts; ms.sources.add(f.source);
+    for (const s of dec.signals) {
+      const key = mn + '.' + s.sig;
+      let sig = state.signals.get(key);
+      if (!sig) {
+        sig = { msg: mn, sig: s.sig, unit: s.unit, desc: s.desc, label: s.label, pgn: dec.msg.pgn,
+          count: 0, na: 0, min: Infinity, max: -Infinity, sum: 0, first: null, last: null, lastLabel: null, t: [], v: [] };
+        state.signals.set(key, sig); state._dirtyPicker = true;
+      }
+      if (s.na) { sig.na++; continue; }
+      sig.t.push(ts); sig.v.push(s.phys); sig.last = s.phys; sig.lastLabel = s.label;
+    }
+  }
+
+  function liveTick() {
+    const now = state.tMax || Date.now();
+    const start = now - LIVE_WINDOW_MS;
+    for (const sig of state.signals.values()) {
+      if (sig.derived) continue;
+      const t = sig.t;
+      if (t.length && t[0] < start) {           // taglia la finestra scorrevole
+        let lo = 0, hi = t.length;
+        while (lo < hi) { const m = (lo + hi) >> 1; if (t[m] < start) lo = m + 1; else hi = m; }
+        sig.t = t.slice(lo); sig.v = sig.v.slice(lo);
+      }
+      const vv = sig.v; let mn = Infinity, mx = -Infinity, sum = 0;
+      for (let i = 0; i < vv.length; i++) { const x = vv[i]; if (x < mn) mn = x; if (x > mx) mx = x; sum += x; }
+      sig.count = vv.length; sig.min = mn; sig.max = mx; sig.sum = sum;
+      sig.first = vv.length ? vv[0] : null;
+      if (vv.length) sig.last = vv[vv.length - 1];
+    }
+    buildDerived();
+    renderSummary();
+    $('#status').textContent = `● LIVE — ${state.totalFrames.toLocaleString('it-IT')} frame ricevuti · `
+      + `${[...state.signals.values()].filter(s => s.count).length} grandezze · finestra ${Math.round(LIVE_WINDOW_MS / 60000)} min`;
+    const tab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+    if (tab === 'signals') renderSignals($('#sig-filter').value);
+    else if (tab === 'messages') renderMessages();
+    else if (tab === 'plot') {
+      const keys = [...$('#plot-select').selectedOptions].map(o => o.value);
+      if (keys.length) drawInto($('#plot-canvas'), keys, $('#plot-legend'));
+    }
+    if (state._dirtyPicker) { renderPlotPicker(); state._dirtyPicker = false; }
+  }
+
   /* ---------- init ---------- */
   function init() {
     DEC.buildIndex();
     setupTabs();
-    $('#file-input').addEventListener('change', e => readFiles(e.target.files));
-    $('#btn-auto').addEventListener('click', autoLoad);
+    $('#file-input').addEventListener('change', e => { disconnectLive(true); readFiles(e.target.files); });
+    $('#btn-auto').addEventListener('click', () => { disconnectLive(true); autoLoad(); });
+    $('#btn-live').addEventListener('click', () => {
+      if (liveMode) disconnectLive();
+      else connectLive($('#ws-url').value.trim());
+    });
     $('#sig-filter').addEventListener('input', e => renderSignals(e.target.value));
     $('#plot-select').addEventListener('change', e => {
       const keys = [...e.target.selectedOptions].map(o => o.value).slice(0, 8);

@@ -144,5 +144,5 @@
     return { msg, signals: out };
   }
 
-  window.FMSDecoder = { buildIndex, parseCsv, decodeFrame, PROP };
+  window.FMSDecoder = { buildIndex, parseCsv, decodeFrame, hexToBytes, PROP };
 })();

@@ -31,8 +31,17 @@ FMS-Rampini/
 │                       #   infografica.html/.png, slide.html
 └── tools/
     ├── gen_signals.py       # rigenera src/signals.js dal DBC
-    └── gen_presentation.py  # rigenera docs/infografica.html e docs/slide.html dal catalogo
+    ├── gen_presentation.py  # rigenera docs/infografica.html e docs/slide.html dal catalogo
+    └── live_agent.py        # agente live: legge il bus CAN (o riproduce i dump) -> WebSocket
 ```
+
+## Modalità live
+`tools/live_agent.py` (solo stdlib) legge il bus via **SocketCAN nativo** (`socket.PF_CAN`) o
+**riproduce i dump** (`--source replay`) e streama i frame J1939 `{pgn,source,ts,d:"hex"}` via
+**WebSocket** (server fatto a mano, nessuna dipendenza). La dashboard (`app.js`) ha una **modalità
+Live**: si connette via `new WebSocket()`, decodifica ogni frame con lo stesso `decoder.js`
+(esposto `hexToBytes`) e mantiene una **finestra scorrevole di 5 min** ricalcolando le statistiche a
+ogni tick (1 Hz), con riconnessione automatica. La modalità a file (CSV) resta invariata.
 
 ## Formato dei dump (candump *.csv)
 Header: `hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered`
