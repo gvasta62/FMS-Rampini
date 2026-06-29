@@ -11,7 +11,7 @@ NS_ :
 
 BS_:
 
-BU_: Vector__XXX
+BU_: BMS Condizionatore_Batterie Gateway_Motore_DANA Climatizzazione_Rampini Multiplex_TEQ Interfaccia_Controllo_Impianti Vector__XXX
 
 
 BO_ 2566851102 BMS_STAT3: 8 Vector__XXX
@@ -345,6 +345,16 @@ CM_ BO_ 2566842366 "Vehicle Hours";
 CM_ BO_ 2633935883 "Wheel Brake Lining Remaining Information";
 CM_ BO_ 2566834718 "Codici Errore Diagnostici Attivi";
 CM_ BO_ 2566834694 "Codici Errore Diagnostici Attivi";
+
+CM_ BO_ 2566856254 "[IGNORARE - R7 Rampini] PGN 65310. Nel dump esteso arriva da source 40/58/59, non e' un dato BMS utile. Da non decodificare.";
+CM_ BO_ 2566852638 "[IGNORARE - R8b Rampini] BMS_LCD_STAT. Nel dump esteso il PGN 65296 compare solo su source 39 (Multiplex TEQ), mai su source 30 (BMS). Da non decodificare come BMS.";
+
+CM_ BU_ BMS "Batteria - source 0x1E (30)";
+CM_ BU_ Condizionatore_Batterie "Condizionatore batterie - source 0x3A (58)";
+CM_ BU_ Gateway_Motore_DANA "Gateway per motore DANA - source 0xD0 (208)";
+CM_ BU_ Climatizzazione_Rampini "Climatizzazione Rampini - source 0x06 (6)";
+CM_ BU_ Multiplex_TEQ "Multiplex TEQ - source 0x27 (39)";
+CM_ BU_ Interfaccia_Controllo_Impianti "Interfaccia di controllo impianti - source 0x28 (40)";
 
 BA_DEF_  "BusType" STRING ;
 BA_DEF_  "ProtocolType" STRING ;

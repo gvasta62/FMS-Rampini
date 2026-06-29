@@ -145,6 +145,58 @@ a 0 kWh (clima in raffrescamento).
 - **Posizione GPS**: non transita sul canale FMS (la fornisce il modulo telematico); coerente con
   il fatto che il DBC non definisce messaggi di posizione.
 
+## 6-bis. Confronto con il costruttore e analisi del dump esteso (R1–R12)
+
+A valle dell'analisi sono stati formalizzati 12 quesiti tecnici al costruttore (Rampini). Le risposte
+R1–R6 erano già state recepite nel DBC; le risposte **R7–R12** hanno chiuso la fase analitica e sono
+state validate empiricamente sul **dump esteso** (capture in marcia, 6 file `candump (18..23).csv`,
+~350.000 frame, durata aggregata **750,6 s ≈ 12,5 min**, velocità fino a 52 km/h).
+
+| Quesito | Risposta | Azione | Stato |
+|---|---|---|---|
+| R7 | Ignorare PGN 65310 | `PCU_BMS` marcato IGNORE | Chiuso |
+| R8a | In attesa dump esteso | Dump inviato | Attesa Rampini |
+| R8b | Ignorare `BMS_LCD_STAT` (src 39) | Messaggio marcato IGNORE | Chiuso |
+| R9 | In attesa dump esteso | Dump inviato + frequenza verificata | Attesa Rampini |
+| R10 | Tabella source nodi | Anagrafica `BU_` + commenti DBC | Chiuso |
+| R11 | Resto DBC ok, ignorare segnali non elencati | Nessuna modifica strutturale | Chiuso |
+| R12 | Posizione via modulo telematico | Confermato | Chiuso |
+
+**Verifica empirica sul dump esteso:**
+
+- **R7 — PGN 65310**: nel dump non proviene dal source 62 con cui era definito (`PCU_BMS`), ma da
+  source 40 (3.394 frame), 58 (301) e 59 (261). Coerente con l'indicazione di ignorarlo.
+- **R8b — BMS_LCD_STAT (PGN 65296)**: compare **esclusivamente su source 39** (0x27, Multiplex TEQ),
+  3.344 frame, **mai su source 30** (BMS). Nel DBC era erroneamente ancorato a source 30. Marcato IGNORE.
+- **R9 — frequenze BMS (source 30)**: i messaggi BMS principali sono regolari ad alta frequenza,
+  mentre BMS_ENERGY è l'unico lento:
+
+  | Messaggio | PGN | Frequenza | Periodo |
+  |---|---|---|---|
+  | BMS_V | 65280 | 4,23 Hz | ~0,24 s |
+  | BMS_T | 65281 | 4,19 Hz | ~0,24 s |
+  | BMS_STAT1 | 65282 | 4,13 Hz | ~0,24 s |
+  | BMS_STAT2 | 65283 | 4,09 Hz | ~0,24 s |
+  | **BMS_ENERGY** | **65289** | **0,08 Hz** | **~5–12 s (mediana 5,67 s)** |
+
+  La comparsa "ogni ~5 secondi" osservata da Rampini sul dump ridotto **si conferma sul dump esteso**:
+  non era sottocampionamento, è la cadenza reale. È la causa diretta della scarsa reattività di
+  `EnergyOut`/`EnergyCharged`/`BatteryPower`, che viaggiano tutti su questo PGN.
+
+**Modifiche al DBC** (`RAMPINI_ELTRON_TERNI_corretto.dbc`): aggiunta anagrafica nodi `BU_` con i 6
+source di R10 documentati nei commenti `CM_ BU_`; marcatura IGNORE (via `CM_ BO_`) sui messaggi
+`PCU_BMS` e `BMS_LCD_STAT`; nessuna rimozione fisica (61 messaggi, 171 segnali invariati). Resta da
+correggere un errore preesistente, non correlato (segnale `FMI1_ECAS` che eccede `DM01_ECAS`), che
+blocca il parsing strict di cantools ma è tollerato dalla dashboard JS.
+
+**Anagrafica nodi (R10):** BMS 0x1E (30) · Condizionatore batterie 0x3A (58) · Gateway motore DANA
+0xD0 (208) · Climatizzazione Rampini 0x06 (6) · Multiplex TEQ 0x27 (39) · Interfaccia controllo
+impianti 0x28 (40).
+
+**Punti aperti.** Lato Rampini: R8a e R9 (analisi del dump esteso, frequenza BMS_ENERGY e popolamento
+contatori energetici). Lato Onell/ChargePoint: remapping widget velocità su CCVS (PGN 65265) e
+correzione convenzione segno potenza (calcolo P = V × I lato ChargePoint).
+
 ## 7. Pubblicazione
 
 Il progetto è pubblicato su un **repository GitHub pubblico** con **GitHub Pages** attivo

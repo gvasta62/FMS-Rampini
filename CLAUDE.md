@@ -89,6 +89,18 @@ Header: `hexCanId,canId,pgn,source,timestamp,iface,value,willBeFiltered`
 - Contatori `EnergyOut`/`EnergyCharged` (BMS_ENERGY) restano a 0 (non popolati dal BMS): è un limite del dato, non della dashboard.
 - La posizione GPS **non** transita sul FMS (la fornisce il modulo telematico).
 
+## Stato confronto con Rampini (R1–R12) — giugno 2026
+- R1–R6: recepiti (rimappamenti source + correzioni scala già nel DBC).
+- **R7**: PGN 65310 (`PCU_BMS`) → IGNORE. Nel dump esteso arriva da source 40/58/59, non da 62.
+- **R8a / R9**: in attesa analisi Rampini sul dump esteso (inviato).
+- **R8b**: `BMS_LCD_STAT` (PGN 65296) → IGNORE. Nel dump compare solo su source 39 (Multiplex TEQ), mai su 30 (BMS).
+- **R10**: anagrafica nodi `BU_` aggiunta al DBC con commenti `CM_ BU_`. Source: BMS 0x1E, Cond.batt 0x3A, Gateway DANA 0xD0, Clima 0x06, Multiplex TEQ 0x27, Interf.impianti 0x28.
+- **R11**: resto DBC ok; segnali non elencati ignorabili. Nessuna modifica strutturale.
+- **R12**: posizione via modulo telematico, non CAN. Confermato.
+- **Frequenza BMS (dump esteso, src 30)**: BMS_V/T/STAT1/STAT2 ~4,2 Hz; **BMS_ENERGY 0,08 Hz** (mediana 5,67 s). Conferma il "~5 s" del costruttore: non è sottocampionamento.
+- **Bug DBC preesistente**: segnale `FMI1_ECAS` eccede `DM01_ECAS` → blocca parsing strict di cantools (la dashboard JS lo tollera). Da correggere a parte.
+- **Punti aperti Onell/ChargePoint**: widget velocità da rimappare su CCVS (65265); segno potenza da correggere lato calcolo P=V×I.
+
 ## Convenzioni di lavoro
 - `signals.js` è **generato**: per modificarlo si edita il DBC e si rilancia `python3 tools/gen_signals.py`.
 - Lingua UI: **italiano**. Codice e commenti: italiano/inglese tecnico.
