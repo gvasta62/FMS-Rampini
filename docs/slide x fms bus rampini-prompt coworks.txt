@@ -1,0 +1,8 @@
+leggi i file in C:\Users\gvast\OneDrive - Gruppo Ferrovie Dello Stato\claude\FMS-Rampini\docs\
+Crea una presentazione con:
+-massimo 25 slide
+-stile professionale
+-un punto chiave per slide
+-aggiungi immagini illustrative e tecniche alle slide
+-crea una architettura schematica della soluzione
+-la prima slide deve essere una infografica del progetto
